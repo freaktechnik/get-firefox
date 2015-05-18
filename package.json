@@ -1,6 +1,6 @@
 {
   "name": "get-fennec",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Download the latest Firefox for Android Nightly from teh command line",
   "main": "index.js",
   "scripts": {

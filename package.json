@@ -23,5 +23,12 @@
   },
   "bin": {
     "get-fennec": "./bin/get-fennec"
+  },
+  "bugs": {
+    "url": "https://github.com/freaktechnik/get-fennec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/freaktechnik/get-fennec.git"
   }
 }

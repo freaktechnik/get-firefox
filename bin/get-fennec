@@ -2,13 +2,18 @@
 
 var downloadNightly = require("../").downloadNightly;
 var program = require("commander");
-var pkg = require( path.join(__dirname, 'package.json') );
+var path = require('path');
+var pkg = require( path.join(__dirname, "../", 'package.json') );
+var sync = require("synchronize");
 
 program
     .version(pkg.version)
-    .command("get-fennec <destination file>")
+    .arguments("<destination>")
     .action(function(targetFile) {
-        downloadNightly(targetFile);
+        sync.fiber(function() {
+            process.stdout.write("Searching latest Fennex nightly...\n");
+            sync.await(downloadNightly(targetFile, sync.defer()));
+        });
     });
 
 program.parse(process.argv);

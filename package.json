@@ -19,7 +19,8 @@
   "dependencies": {
     "commander": "^2.8.1",
     "jsftp": "^1.5.2",
-    "save-to": "^1.0.3"
+    "save-to": "^1.0.3",
+    "synchronize": "^0.9.11"
   },
   "bin": {
     "get-fennec": "./bin/get-fennec"

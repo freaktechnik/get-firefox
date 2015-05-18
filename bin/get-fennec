@@ -1,4 +1,4 @@
-#! /usr/bin/env nodejs
+#! /usr/bin/env node
 
 var downloadNightly = require("../").downloadNightly;
 var program = require("commander");

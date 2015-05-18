@@ -1,0 +1,15 @@
+#! /usr/bin/env nodejs
+
+var { downloadNightly } = require("../");
+var program = require("commander");
+var pkg = require( path.join(__dirname, 'package.json') );
+
+program
+    .version(pkg.version)
+    .command("get-fennec <destination file>")
+    .action(function(targetFile) {
+        downloadNightly(targetFile);
+    });
+
+program.parse(process.argv);
+

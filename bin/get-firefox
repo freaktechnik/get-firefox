@@ -1,0 +1,19 @@
+#! /usr/bin/env node
+
+var downloadNightly = require("../").downloadNightly;
+var program = require("commander");
+var path = require('path');
+var pkg = require( path.join(__dirname, "../", 'package.json') );
+var sync = require("synchronize");
+
+program
+    .version(pkg.version)
+    .option("-p --platform <platform>", "Platform of the Firefox version", /^(win|mac|linux|android)$/i, 'linux')
+    .option("-t --target [target]", "Target filename")
+    .parse(process.argv);
+
+sync.fiber(function() {
+    process.stdout.write("Searching latest Fennex nightly...\n");
+    console.log(program.platform);
+    sync.await(downloadNightly(program.platform, program.target, sync.defer()));
+});

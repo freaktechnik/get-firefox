@@ -14,6 +14,5 @@ program
 
 sync.fiber(function() {
     process.stdout.write("Searching latest Fennex nightly...\n");
-    console.log(program.platform);
     sync.await(downloadNightly(program.platform, program.target, sync.defer()));
 });

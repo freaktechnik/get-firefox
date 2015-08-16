@@ -1,18 +1,56 @@
 #! /usr/bin/env node
 
-var downloadNightly = require("../").downloadNightly;
+var index = require("../");
 var program = require("commander");
 var path = require('path');
 var pkg = require( path.join(__dirname, "../", 'package.json') );
-var sync = require("synchronize");
+var ProgressBar = require("progress");
 
 program
     .version(pkg.version)
-    .option("-p --platform <platform>", "Platform of the Firefox version", /^(win|mac|linux|android)$/i, 'linux')
-    .option("-t --target [target]", "Target filename")
+    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android)$/i, 'linux')
+    .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v(11|9))$/)
+    .option("-t --target [target]", "target filename, defaults to the remote filename")
+    .option("-v --verbose", "verbose output about the progress")
+    .option("-c --check", "check the checksum for the download")
+    .option("-e --extract", "extract archive after download")
     .parse(process.argv);
 
-sync.fiber(function() {
-    process.stdout.write("Searching latest Fennex nightly...\n");
-    sync.await(downloadNightly(program.platform, program.target, sync.defer()));
+
+process.stdout.write("Searching latest Firefox nightly...\n");
+var progress;
+
+index.getNightlyLocation(program.platform, program.arch)
+.then(function(source) {
+    var destination = program.target || source.split("/").pop();
+    process.stdout.write("Downloading from "+ source + " and saving as " + destination + "\n");
+    return index.downloadNightly(source, destination, function(state) {
+        if(program.verbose) {
+            if(!progress) {
+                progress = new ProgressBar(destination+': [:bar] :percent :etas', {
+                    complete: '=',
+                    incomplete: ' ',
+                    total: state.total
+                });
+            }
+            progress.tick(state.received - progress.curr);
+        }
+    }).then(function() {
+        if(program.verbose) {
+            progress.tick(progress.total);
+        }
+        if(program.check) {
+            return index.check(source, destination).then(function(msg) {
+                process.stdout.write(msg+"\n");
+            });
+        }
+    }).then(function() {
+        if(program.extract) {
+            process.stdout.write("Extracting the archive...\n");
+            return index.extract(destination);
+        }
+    });
+})
+.catch(function(error) {
+    process.stderr.write("Error downloading Firefox: "+error+"\n");
 });

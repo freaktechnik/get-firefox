@@ -6,7 +6,7 @@ Note that this package works even after the recent ftp.mozilla.org to
 [archive.mozilla.org](https://archive.mozilla.org) change.
 
 It determines the file names using a helperfile built with the other packages,
-so it might break if the build infrastructure breaks.
+so it might break if the build infrastructure changes.
 
 ## Installation
 
@@ -21,7 +21,7 @@ Run `get-firefox --help` for a complete description of possible options.
 ```js
 var getFirefox = require("get-firefox");
 ```
-The main module implements two public methods.
+The main module implements three public methods.
 
 ### getNightlyLocation(platform, architecture)
 Returns a promise that resolves with an URL pointing to the file to download.
@@ -36,6 +36,10 @@ The progress callback is called with a state object with the following structure
   percent: 0.5 // Percentage received
 }
 ```
+
+### extract(filePath)
+Extracts the file in `filePath` in place. Currently supports zip, tar, tar.gz
+and tar.bz2 files.
 
 ## License
 The source code in this package is licensed under the MPL-2.0. A copy of the

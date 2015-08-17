@@ -3,7 +3,7 @@ Download the latest Firefox from the command line. Currently only desktop and
 android nightlies.
 
 Note that this package works even after the recent ftp.mozilla.org to
-[archive.mozilla.org][] change.
+[archive.mozilla.org](https://archive.mozilla.org) change.
 
 It determines the file names using a helperfile built with the other packages,
 so it might break if the build infrastructure breaks.
@@ -39,4 +39,4 @@ The progress callback is called with a state object with the following structure
 
 ## License
 The source code in this package is licensed under the MPL-2.0. A copy of the
-license text can be found in the [LICENSE][] file.
+license text can be found in the [LICENSE](LICENSE) file.

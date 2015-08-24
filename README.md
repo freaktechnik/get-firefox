@@ -39,7 +39,7 @@ The progress callback is called with a state object with the following structure
 
 ### extract(filePath)
 Extracts the file in `filePath` in place. Currently supports zip, tar, tar.gz
-and tar.bz2 files.
+and tar.bz2 archives.
 
 ## License
 The source code in this package is licensed under the MPL-2.0. A copy of the

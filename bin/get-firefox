@@ -5,6 +5,7 @@ var program = require("commander");
 var path = require('path');
 var pkg = require( path.join(__dirname, "../", 'package.json') );
 var ProgressBar = require("progress");
+var colors = require("colors");
 
 program
     .version(pkg.version)
@@ -14,43 +15,53 @@ program
     .option("-v --verbose", "verbose output about the progress")
     .option("-c --check", "check the checksum for the download")
     .option("-e --extract", "extract archive after download")
+    .option("-l --list", "list all platforms and architectures")
     .parse(process.argv);
 
+if(program.list) {
+    var platforms = require("../lib/platforms.json");
+    for(var p in platforms) {
+        for(var a in platforms[p].arches) {
+            process.stdout.write(p + " " + a + (a == platforms[p].defaultArch ? " (default architecture)".grey:"") + "\n");
+        }
+    }
+}
+else {
+    process.stdout.write("Searching latest Firefox nightly...\n");
+    var progress;
 
-process.stdout.write("Searching latest Firefox nightly...\n");
-var progress;
-
-index.getNightlyLocation(program.platform, program.arch)
-.then(function(source) {
-    var destination = program.target || source.split("/").pop();
-    process.stdout.write("Downloading from "+ source + " and saving as " + destination + "\n");
-    return index.downloadNightly(source, destination, function(state) {
-        if(program.verbose) {
-            if(!progress) {
-                progress = new ProgressBar(destination+': [:bar] :percent :etas', {
-                    complete: '=',
-                    incomplete: ' ',
-                    total: state.total
+    index.getNightlyLocation(program.platform, program.arch)
+    .then(function(source) {
+        var destination = program.target || source.split("/").pop();
+        process.stdout.write("Downloading from "+ source.blue + " and saving as " + destination.blue + "\n");
+        return index.downloadNightly(source, destination, function(state) {
+            if(program.verbose) {
+                if(!progress) {
+                    progress = new ProgressBar('[:bar] :percent :etas', {
+                        complete: '='.green,
+                        incomplete: ' ',
+                        total: state.total
+                    });
+                }
+                progress.tick(state.received - progress.curr);
+            }
+        }).then(function() {
+            if(program.verbose) {
+                progress.tick(progress.total);
+            }
+            if(program.check) {
+                return index.check(source, destination).then(function(msg) {
+                    process.stdout.write(msg+"\n");
                 });
             }
-            progress.tick(state.received - progress.curr);
-        }
-    }).then(function() {
-        if(program.verbose) {
-            progress.tick(progress.total);
-        }
-        if(program.check) {
-            return index.check(source, destination).then(function(msg) {
-                process.stdout.write(msg+"\n");
-            });
-        }
-    }).then(function() {
-        if(program.extract) {
-            process.stdout.write("Extracting the archive...\n");
-            return index.extract(destination);
-        }
+        }).then(function() {
+            if(program.extract) {
+                process.stdout.write("Extracting the archive...\n");
+                return index.extract(destination);
+            }
+        });
+    })
+    .catch(function(error) {
+        process.stderr.write("Error downloading Firefox: "+error.red+"\n");
     });
-})
-.catch(function(error) {
-    process.stderr.write("Error downloading Firefox: "+error+"\n");
-});
+}

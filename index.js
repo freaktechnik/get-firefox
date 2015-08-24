@@ -15,60 +15,7 @@ var Decompress = require("decompress");
 
 var URL = "https://archive.mozilla.org/pub/";
 
-var PLATFORMS = {
-    android: {
-        defaultArch: "arm-v11",
-        arches: {
-            "arm-v11": {
-                path: "mobile/nightly/latest-mozilla-central-android-api-11/",
-                fileEnding: ".android-arm.apk"
-            },
-            "arm-v9": {
-                path: "mobile/nightly/latest-mozilla-central-android-api-9/",
-                fileEnding: ".android-arm.apk"
-            },
-            "x86": {
-                path: "mobile/nightly/latest-mozilla-entral-android-x86/",
-                fileEnding: ".android-i386.apk"
-            }
-        }
-    },
-    linux: {
-        defaultArch: "x86_64",
-        arches: {
-            "x86_64": {
-                path: "firefox/nightly/latest-trunk/",
-                fileEnding: ".linux-x86_64.tar.bz2"
-            },
-            "x86": {
-                path: "firefox/nightly/latest-trunk/",
-                fileEnding: ".linux-i686.tar.bz2"
-            }
-        }
-    },
-    mac: {
-        defaultArch: "multi",
-        arches: {
-            "multi": {
-                path: "firefox/nightly/latest-trunk/",
-                fileEnding: ".mac.dmg"
-            }
-        }
-    },
-    win: {
-        defaultArch: "x86_64",
-        arches: {
-            "x86_64": {
-                path: "firefox/nightly/latest-trunk/",
-                fileEnding: ".win64.installer.exe"
-            },
-            "x86": {
-                path: "firefox/nightly/latest-trunk/",
-                fileEnding: ".win32.installer.exe"
-            }
-        }
-    }
-};
+var PLATFORMS = require("./lib/platforms.json");
 
 var getBaseFilenameFromTestPackage = function(testPackageName) {
     return testPackageName.split(".").slice(0, 3).join(".");

@@ -20,6 +20,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "checksum": "^0.1.1",
+    "colors": "^1.1.2",
     "commander": "^2.8.1",
     "decompress": "^2.3.0",
     "es6-promise": "^2.3.0",

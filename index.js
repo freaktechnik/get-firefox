@@ -12,6 +12,7 @@ var progress = require("request-progress");
 var Promise = require("es6-promise").Promise;
 var checksum = require("checksum");
 var Decompress = require("decompress");
+var mdu = require("moz-download-url");
 
 var URL = "https://archive.mozilla.org/pub/";
 
@@ -38,10 +39,15 @@ var getDownloadInfo = function(system, arch) {
 
 var getArchForURL = function(source) {
     for(var system in PLATFORMS) {
-        for(var a in PLATFORMS[system].arches) {
-            if(source.indexOf(PLATFORMS[system].arches[a].fileEnding) != -1) {
-                return PLATFORMS[system].arches[a];
+        if(!PLATFORMS[system].mdu) {
+            for(var a in PLATFORMS[system].arches) {
+                if(source.indexOf(PLATFORMS[system].arches[a].fileEnding) != -1) {
+                    return PLATFORMS[system].arches[a];
+                }
             }
+        }
+        else {
+            return false;
         }
     }
 };
@@ -49,14 +55,27 @@ var getArchForURL = function(source) {
 var getChecksumFileName = function(source) {
     var arch = getArchForURL(source);
 
-    var purgeLength = arch.fileEnding.split(".").length - 2;
+    if(arch) {
+        var purgeLength = arch.fileEnding.split(".").length - 2;
 
-    return source.split(".").slice(0, -purgeLength).join(".") + ".checksums";
+        return source.split(".").slice(0, -purgeLength).join(".") + ".checksums";
+    }
+    else {
+        throw "No checksums available";
+    }
 };
 
 var getChecksumFile = function(source) {
     return new Promise(function(resolve, reject) {
-        request(getChecksumFileName(source), function(error, response, body) {
+        var checksumFile;
+        try {
+            checksumFile = getChecksumFileName(source);
+        }
+        catch(e) {
+            reject(e);
+            return;
+        }
+        request(checksumFile, function(error, response, body) {
             if(!error && response.statusCode == 200) {
                 resolve(body);
             }
@@ -107,19 +126,33 @@ exports.getNightlyLocation = function(platform, arch) {
     var platformObj = getDownloadInfo(platform, arch);
 
     return new Promise(function(resolve, reject) {
-        request(URL+platformObj.path+"test_packages.json", function(error, response, body) {
-            if(!error && response.statusCode == 200) {
-                var json = JSON.parse(body);
-                resolve(URL
-                    + platformObj.path
-                    + getBaseFilenameFromTestPackage(json.common[0])
-                    + platformObj.fileEnding
-                );
-            }
-            else {
-                reject("Couldn't load the information file "+URL+platformObj.path+"test_packages.json");
-            }
-        });
+        if(!PLATFORMS[platform].mdu) {
+            request(URL+platformObj.path+"test_packages.json", function(error, response, body) {
+                if(!error && response.statusCode == 200) {
+                    var json = JSON.parse(body);
+                    resolve({source: URL
+                        + platformObj.path
+                        + getBaseFilenameFromTestPackage(json.common[0])
+                        + platformObj.fileEnding
+                    });
+                }
+                else {
+                    reject("Couldn't load the information file "+URL+platformObj.path+"test_packages.json");
+                }
+            });
+        }
+        else {
+            var url = mdu.build("firefox-nightly-latest", platformObj.platform, "en-US");
+            request({
+                method: "HEAD",
+                uri: url
+            }, function(error, response) {
+                if(!error)
+                    resolve({ source: url, destination: response.request.path.split("/").pop() });
+                else
+                    reject("Couldn't find the file "+url);
+            });
+        }
     });
 };
 
@@ -150,6 +183,11 @@ exports.check = function(source, localName) {
             return "Checksum matches";
         else
             throw "Checksum mismatch";
+    }, function(e) {
+        if(e == "No checksums available")
+            return e;
+        else
+            throw e;
     });
 };
 

@@ -31,10 +31,10 @@ else {
     var progress;
 
     index.getNightlyLocation(program.platform, program.arch)
-    .then(function(source) {
-        var destination = program.target || source.split("/").pop();
-        process.stdout.write("Downloading from "+ source.blue + " and saving as " + destination.blue + "\n");
-        return index.downloadNightly(source, destination, function(state) {
+    .then(function(obj) {
+        obj.destination = program.target || obj.destination || source.split("/").pop();
+        process.stdout.write("Downloading from "+ obj.source.blue + " and saving as " + obj.destination.blue + "\n");
+        return index.downloadNightly(obj.source, obj.destination, function(state) {
             if(program.verbose) {
                 if(!progress) {
                     progress = new ProgressBar('[:bar] :percent :etas', {
@@ -50,14 +50,14 @@ else {
                 progress.tick(progress.total);
             }
             if(program.check) {
-                return index.check(source, destination).then(function(msg) {
+                return index.check(obj.source, obj.destination).then(function(msg) {
                     process.stdout.write(msg+"\n");
                 });
             }
         }).then(function() {
             if(program.extract) {
                 process.stdout.write("Extracting the archive...\n");
-                return index.extract(destination);
+                return index.extract(obj.destination);
             }
         });
     })

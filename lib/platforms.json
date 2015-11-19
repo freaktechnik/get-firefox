@@ -1,6 +1,7 @@
 {
     "android": {
         "defaultArch": "arm-v11",
+        "mdu": false,
         "arches": {
             "arm-v11": {
                 "path": "mobile/nightly/latest-mozilla-central-android-api-11/",
@@ -18,36 +19,34 @@
     },
     "linux": {
         "defaultArch": "x86_64",
+        "mdu": true,
         "arches": {
             "x86_64": {
-                "path": "firefox/nightly/latest-trunk/",
-                "fileEnding": ".linux-x86_64.tar.bz2"
+                "platform": "linux64"
             },
             "x86": {
-                "path": "firefox/nightly/latest-trunk/",
-                "fileEnding": ".linux-i686.tar.bz2"
+                "platform": "linux"
             }
         }
     },
     "mac": {
         "defaultArch": "multi",
+        "mdu": true,
         "arches": {
             "multi": {
-                "path": "firefox/nightly/latest-trunk/",
-                "fileEnding": ".mac.dmg"
+                "platform": "osx"
             }
         }
     },
     "win": {
         "defaultArch": "x86_64",
+        "mdu": true,
         "arches": {
             "x86_64": {
-                "path": "firefox/nightly/latest-trunk/",
-                "fileEnding": ".win64.installer.exe"
+                "platform": "win64"
             },
             "x86": {
-                "path": "firefox/nightly/latest-trunk/",
-                "fileEnding": ".win32.installer.exe"
+                "platform": "win"
             }
         }
     }

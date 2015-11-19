@@ -24,6 +24,7 @@
     "commander": "^2.8.1",
     "decompress": "^2.3.0",
     "es6-promise": "^2.3.0",
+    "moz-download-url": "^1.0.0",
     "progress": "^1.1.8",
     "request": "^2.60.0",
     "request-progress": "^0.3.1"

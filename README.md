@@ -1,4 +1,6 @@
 # get-firefox
+[![Dependency Status](https://dependencyci.com/github/freaktechnik/get-firefox/badge)](https://dependencyci.com/github/freaktechnik/get-firefox)
+
 Download the latest Firefox from the command line. Currently only desktop and
 android nightlies.
 

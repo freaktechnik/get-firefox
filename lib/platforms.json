@@ -1,59 +1,329 @@
 {
     "android": {
-        "defaultArch": "arm-v15",
-        "type": "classic",
-        "arches": {
-            "arm-v11": {
-                "path": "mobile/nightly/latest-mozilla-central-android-api-15/",
-                "fileEnding": ".android-arm.apk"
+        "defaultBranch": "nightly",
+        "branches": {
+            "nightly": {
+                "defaultArch": "arm-v15",
+                "type": "classic",
+                "arches": {
+                    "arm-v15": {
+                        "path": "mobile/nightly/latest-mozilla-central-android-api-15/",
+                        "fileEnding": ".android-arm.apk"
+                    },
+                    "x86": {
+                        "path": "mobile/nightly/latest-mozilla-central-android-x86/",
+                        "fileEnding": ".android-i386.apk"
+                    }
+                }
             },
-            "x86": {
-                "path": "mobile/nightly/latest-mozilla-central-android-x86/",
-                "fileEnding": ".android-i386.apk"
+            "beta": {
+                "defaultArch": "arm-v15",
+                "type": "mdu",
+                "arches": {
+                    "arm-v15": {
+                        "platform": "android",
+                        "product": "fennec-beta-latest"
+                    },
+                    "x86": {
+                        "platform": "android-x86",
+                        "product": "fennec-beta-latest"
+                    }
+                }
+            },
+            "release": {
+                "defaultArch": "arm-v15",
+                "type": "mdu",
+                "arches": {
+                    "arm-v15": {
+                        "platform": "android",
+                        "product": "fennec-latest"
+                    },
+                    "x86": {
+                        "platform": "android-x86",
+                        "product": "fennec-latest"
+                    }
+                }
             }
         }
     },
     "linux": {
-        "defaultArch": "x86_64",
-        "type": "mdu",
-        "arches": {
-            "x86_64": {
-                "platform": "linux64"
+        "defaultBranch": "nightly",
+        "branches": {
+            "nightly": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "linux64",
+                        "product": "firefox-nightly-latest"
+                    },
+                    "x86": {
+                        "platform": "linux",
+                        "product": "firefox-nightly-latest"
+                    }
+                }
             },
-            "x86": {
-                "platform": "linux"
+            "aurora": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "linux64",
+                        "product": "firefox-aurora-latest"
+                    },
+                    "x86": {
+                        "platform": "linux",
+                        "product": "firefox-aurora-latest"
+                    }
+                }
+            },
+            "beta": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "linux64",
+                        "product": "firefox-beta-latest"
+                    },
+                    "x86": {
+                        "platform": "linux",
+                        "product": "firefox-beta-latest"
+                    }
+                }
+            },
+            "release": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "linux64",
+                        "product": "firefox-latest"
+                    },
+                    "x86": {
+                        "platform": "linux",
+                        "product": "firefox-latest"
+                    }
+                }
+            },
+            "esr": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "linux64",
+                        "product": "firefox-esr-latest"
+                    },
+                    "x86": {
+                        "platform": "linux",
+                        "product": "firefox-esr-latest"
+                    }
+                }
+            },
+            "unbranded-release": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-release.latest.firefox.linux64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".tar.bz2"
+                    }
+                }
+            },
+            "unbranded-beta": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-beta.latest.firefox.linux64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".tar.bz2"
+                    }
+                }
             }
         }
     },
     "mac": {
-        "defaultArch": "multi",
-        "type": "mdu",
-        "arches": {
-            "multi": {
-                "platform": "osx"
+        "defaultBranch": "nightly",
+        "branches": {
+            "nightly": {
+                "defaultArch": "multi",
+                "type": "mdu",
+                "arches": {
+                    "multi": {
+                        "platform": "osx",
+                        "product": "firefox-nightly-latest"
+                    }
+                }
+            },
+            "aurora": {
+                "defaultArch": "multi",
+                "type": "mdu",
+                "arches": {
+                    "multi": {
+                        "platform": "osx",
+                        "product": "firefox-aurora-latest"
+                    }
+                }
+            },
+            "beta": {
+                "defaultArch": "multi",
+                "type": "mdu",
+                "arches": {
+                    "multi": {
+                        "platform": "osx",
+                        "product": "firefox-beta-latest"
+                    }
+                }
+            },
+            "release": {
+                "defaultArch": "multi",
+                "type": "mdu",
+                "arches": {
+                    "multi": {
+                        "platform": "osx",
+                        "product": "firefox-latest"
+                    }
+                }
+            },
+            "esr": {
+                "defaultArch": "multi",
+                "type": "mdu",
+                "arches": {
+                    "multi": {
+                        "platform": "osx",
+                        "product": "firefox-esr-latest"
+                    }
+                }
+            },
+            "unbranded-release": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-release.latest.firefox.macosx64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".dmg"
+                    }
+                }
+            },
+            "unbranded-beta": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-beta.latest.firefox.macosx64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".dmg"
+                    }
+                }
             }
         }
     },
     "win": {
-        "defaultArch": "x86_64",
-        "type": "mdu",
-        "arches": {
-            "x86_64": {
-                "platform": "win64"
+        "defaultBranch": "nightly",
+        "branches": {
+            "nightly": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "win64",
+                        "product": "firefox-nightly-latest"
+                    },
+                    "x86": {
+                        "platform": "win",
+                        "product": "firefox-nightly-latest"
+                    }
+                }
             },
-            "x86": {
-                "platform": "win"
-            }
-        }
-    },
-    "linux-add-on-devel": {
-        "defaultArch": "x86_64",
-        "type": "taskcluster",
-        "arches": {
-            "x86_64": {
-                "namespace": "gecko.v2.mozilla-release.latest.firefox.linux64-add-on-devel",
-                "path": "/artifacts/",
-                "fileEnding": ".tar.bz2"
+            "aurora": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "win64",
+                        "product": "firefox-aurora-latest"
+                    },
+                    "x86": {
+                        "platform": "win",
+                        "product": "firefox-aurora-latest"
+                    }
+                }
+            },
+            "beta": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "win64",
+                        "product": "firefox-beta-latest"
+                    },
+                    "x86": {
+                        "platform": "win",
+                        "product": "firefox-beta-latest"
+                    }
+                }
+            },
+            "release": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "win64",
+                        "product": "firefox-latest"
+                    },
+                    "x86": {
+                        "platform": "win",
+                        "product": "firefox-latest"
+                    }
+                }
+            },
+            "esr": {
+                "defaultArch": "x86_64",
+                "type": "mdu",
+                "arches": {
+                    "x86_64": {
+                        "platform": "win64",
+                        "product": "firefox-esr-latest"
+                    },
+                    "x86": {
+                        "platform": "win",
+                        "product": "firefox-esr-latest"
+                    }
+                }
+            },
+            "unbranded-release": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-release.latest.firefox.win64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".installer.exe"
+                    },
+                    "x86": {
+                        "namespace": "gecko.v2.mozilla-release.latest.firefox.win32-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".installer.exe"
+                    }
+                }
+            },
+            "unbranded-beta": {
+                "defaultArch": "x86_64",
+                "type": "taskcluster",
+                "arches": {
+                    "x86_64": {
+                        "namespace": "gecko.v2.mozilla-beta.latest.firefox.win64-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".installer.exe"
+                    },
+                    "x86": {
+                        "namespace": "gecko.v2.mozilla-beta.latest.firefox.win32-add-on-devel",
+                        "path": "/artifacts/",
+                        "fileEnding": ".installer.exe"
+                    }
+                }
             }
         }
     }

@@ -14,21 +14,39 @@ program
     .option("-c --check", "check the checksum for the download")
     .option("-e --extract", "extract archive after download")
     .option("-l --list", "list all platforms and architectures")
+    .option("-b --branch [branch]", "release branch to fetch", /^(unbranded-)?(nightly|aurora|beta|release|esr)$/, 'nightly')
     .parse(process.argv);
 
 if(program.list) {
     var platforms = require("../lib/platforms.json");
+    var branch, plat, title;
     for(var p in platforms) {
-        for(var a in platforms[p].arches) {
-            process.stdout.write(p + " " + a + (a == platforms[p].defaultArch ? " (default architecture)".grey:"") + "\n");
+        plat = platforms[p];
+        process.stdout.write(p.underline.bold + "\n");
+        for(var b in plat.branches) {
+            branch = plat.branches[b];
+            title = b.bold;
+            if(b == plat.defaultBranch) {
+                title = title.yellow;
+                title += " (default)".grey;
+            }
+            process.stdout.write(" " + title + "\n");
+            for(var a in branch.arches) {
+                title = a;
+                if(a == branch.defaultArch) {
+                    title += " (default)".grey;
+                }
+                process.stdout.write("   - " + title + "\n");
+            }
         }
+        process.stdout.write("\n");
     }
 }
 else {
-    process.stdout.write("Searching latest Firefox nightly...\n");
+    process.stdout.write("Searching latest Firefox...\n");
     var progress;
 
-    var container = index.getContainer(program.platform, program.arch);
+    var container = index.getContainer(program.branch, program.platform, program.arch);
 
     var promise = Promise.resolve(program.target);
     if(!program.target) {

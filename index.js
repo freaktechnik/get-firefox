@@ -27,12 +27,30 @@ const fs = require("fs"),
     PLATFORMS = require("./lib/platforms.json"),
     CONTAINERS = [ ClassicContainer, MDUContainer, TaskclusterContainer ],
 
-    getDownloadInfo = (system) => {
-        if(!(system in PLATFORMS)) {
-            console.warn("Unknown platform '" + system + "', defaulting to linux");
-            system = "linux";
+    normalizeSystem = (system) => {
+        if(!system || !(system in PLATFORMS)) {
+            if(system) {
+                console.warn("Unknown platform '" + system + "', defaulting to linux");
+            }
+            return "linux";
         }
-        return PLATFORMS[system];
+        else {
+            return system;
+        }
+    },
+    normalizeBranch = (branch, system) => {
+        if(!branch || !(branch in PLATFORMS[system].branches)) {
+            if(branch) {
+                console.warn("Unknown branch '" + branch + "', defaulting to " + PLATFORMS[system].defaultBranch);
+            }
+            return PLATFORMS[system].defaultBranch;
+        }
+        else {
+            return branch;
+        }
+    },
+    getDownloadInfo = (branch, system) => {
+        return PLATFORMS[system].branches[branch];
     },
     getFileChecksum = (container) => {
         return container.getChecksums().then((file) => {
@@ -96,13 +114,16 @@ const fs = require("fs"),
 /**
  * Get the container to pass to the other methods based on system and arch.
  *
+ * @param {string} branch - Firefox release branch.
  * @param {string} system - System name.
  * @param {string} arch - Architecture name.
  * @returns {Container} The container to describe the Firefox to download.
  */
-exports.getContainer = function(system, arch) {
-    const spec = getDownloadInfo(system),
-        type = PLATFORMS[system].type,
+exports.getContainer = function(branch, system, arch) {
+    system = normalizeSystem(system);
+    branch = normalizeBranch(branch, system);
+    const spec = getDownloadInfo(branch, system),
+        type = PLATFORMS[system].branches[branch].type,
         Constructor = CONTAINERS.find((c) => c.type == type);
 
     if(!(arch in spec)) {
@@ -111,7 +132,7 @@ exports.getContainer = function(system, arch) {
         }
         arch = spec.defaultArch;
     }
-    return new Constructor(system, arch, spec);
+    return new Constructor(spec.arches[arch]);
 };
 
 /**

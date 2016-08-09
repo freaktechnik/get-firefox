@@ -1,14 +1,14 @@
 # get-firefox
 [![Build Status](https://travis-ci.org/freaktechnik/get-firefox.svg?branch=master)](https://travis-ci.org/freaktechnik/get-firefox) [![Dependency Status](https://dependencyci.com/github/freaktechnik/get-firefox/badge)](https://dependencyci.com/github/freaktechnik/get-firefox)
 
-Download the latest Firefox from the command line. Currently only desktop and
-android nightlies.
+Download the latest Firefox from the command line. Supports almost any release,
+except on Android.
 
-Note that this package works even after the recent ftp.mozilla.org to
-[archive.mozilla.org](https://archive.mozilla.org) change.
+This package works mostly without relying on
+[archive.mozilla.org](https://archive.mozilla.org).
 
-It determines the file names using a helperfile built with the other packages,
-so it might break if the build infrastructure changes.
+It determines the some file names using a helperfile built with the other
+packages, so it might break if the build infrastructure changes.
 
 ## Installation
 

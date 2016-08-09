@@ -2,3 +2,11 @@ sudo: false
 language: node_js
 node_js: stable
 after_success: npm run coverage
+deploy:
+  provider: npm
+  email: martin@humanoids.be
+  api_key:
+    secure: DS9aXqAhsejnBoufIrPxX+DptAwcJUnROTVQ+s2S1Mqs16Fp5H9/HY/W47brGh634qnTF/M4RxzkV2tLT9pVbYKPC4pw1Nx3HOwfDQICZ4Wqf46Kdgy4tb9TD9H122Ry/rWo1hA7bz7bDCumRnIRKz8mzdgdFBn0XWTiX79VZWT8H2nTvn1dn6lhp0Y5BBc6HBRRUff0kAKFUy1WP8PW6ZRukXb465vTGitSj/LjUkYifa3X7U/6u9q0HiNvhUWX/YpMMAhE8ZFcfelaLxNYJKIGMAfEAVjWEOYdcpJtrKBjVPSImYmGGLFO/JuuzuK8oPyV80nualCttX2UPmupEQcnjY5YPCLmOQpPUZ2AqqUyHalqTdJxVE6BPPXRjejMWtxJL2DiX5OsrSxIV/d11ql05a+i2NN9JDGw80h0Ri0va2s2b1ES/cC4BbLDQRhD7HwkoP9m+USWtN1ykS+XsLF85XaAa1TZLZOcYpUjPozdDTs6Vc0U+t73YrhmzuAkbEYDRb1UvD970uWAwOruz0fRme5X1YUxBu1QPRp8fLJTjJS82+NWBAyKUnANpyr2uppbfQJAcNJPpvfx4o4orlz1rMKKWufc+2w2TwQa1vKcMXO+mxnqs+HPt3UhCfnuwoycUp+gcpjj/phQb4TRQngGhIwbdsYPDJ0Obfm09HQ=
+  on:
+    tags: true
+    repo: freaktechnik/get-firefox

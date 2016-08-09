@@ -14,7 +14,6 @@ const PROPERTIES = {
         "version"
     ],
     "taskcluster": [
-        "path",
         "fileEnding",
         "namespace"
     ]

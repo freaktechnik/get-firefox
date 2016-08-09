@@ -7,7 +7,7 @@ except on Android.
 This package works mostly without relying on
 [archive.mozilla.org](https://archive.mozilla.org).
 
-It determines the some file names using a helperfile built with the other
+It determines some file names using a helperfile built with the other
 packages, so it might break if the build infrastructure changes.
 
 ## Installation

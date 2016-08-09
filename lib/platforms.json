@@ -139,7 +139,6 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-release.latest.firefox.linux64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".tar.bz2"
                     }
                 }
@@ -150,7 +149,6 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-beta.latest.firefox.linux64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".tar.bz2"
                     }
                 }
@@ -221,7 +219,6 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-release.latest.firefox.macosx64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".dmg"
                     }
                 }
@@ -232,7 +229,6 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-beta.latest.firefox.macosx64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".dmg"
                     }
                 }
@@ -343,12 +339,10 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-release.latest.firefox.win64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".installer.exe"
                     },
                     "x86": {
                         "namespace": "gecko.v2.mozilla-release.latest.firefox.win32-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".installer.exe"
                     }
                 }
@@ -359,12 +353,10 @@
                 "arches": {
                     "x86_64": {
                         "namespace": "gecko.v2.mozilla-beta.latest.firefox.win64-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".installer.exe"
                     },
                     "x86": {
                         "namespace": "gecko.v2.mozilla-beta.latest.firefox.win32-add-on-devel",
-                        "path": "/artifacts/",
                         "fileEnding": ".installer.exe"
                     }
                 }

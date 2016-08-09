@@ -4,15 +4,13 @@ var index = require("../");
 var program = require("commander");
 var path = require('path');
 var pkg = require( path.join(__dirname, "../", 'package.json') );
-var ProgressBar = require("progress");
 var colors = require("colors");
 
 program
     .version(pkg.version)
-    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android)$/i, 'linux')
-    .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v(11|9))$/)
+    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android|linux-add-on-devel)$/i, 'linux')
+    .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v15)$/)
     .option("-t --target [target]", "target filename, defaults to the remote filename")
-    .option("-v --verbose", "verbose output about the progress")
     .option("-c --check", "check the checksum for the download")
     .option("-e --extract", "extract archive after download")
     .option("-l --list", "list all platforms and architectures")
@@ -30,38 +28,31 @@ else {
     process.stdout.write("Searching latest Firefox nightly...\n");
     var progress;
 
-    index.getNightlyLocation(program.platform, program.arch)
-    .then(function(obj) {
-        obj.destination = program.target || obj.destination || source.split("/").pop();
-        process.stdout.write("Downloading from "+ obj.source.blue + " and saving as " + obj.destination.blue + "\n");
-        return index.downloadNightly(obj.source, obj.destination, function(state) {
-            if(program.verbose) {
-                if(!progress) {
-                    progress = new ProgressBar('[:bar] :percent :etas', {
-                        complete: '='.green,
-                        incomplete: ' ',
-                        total: state.total
-                    });
-                }
-                progress.tick(state.received - progress.curr);
-            }
-        }).then(function() {
-            if(program.verbose) {
-                progress.tick(progress.total);
-            }
+    var container = index.getContainer(program.platform, program.arch);
+
+    var promise = Promise.resolve(program.target);
+    if(!program.target) {
+        promise = container.getFileName();
+    }
+    return Promise.all([
+        promise,
+        container.getFileURL()
+    ]).then((urls) => {
+        process.stdout.write("Downloading from "+ urls[1].blue + " and saving as " + urls[0].blue + "\n");
+        return index.downloadFirefox(container, urls[0]).then(() => {
             if(program.check) {
-                return index.check(obj.source, obj.destination).then(function(msg) {
+                return index.check(container, urls[0]).then(function(msg) {
                     process.stdout.write(msg+"\n");
                 });
             }
-        }).then(function() {
+        }).then(() => {
             if(program.extract) {
                 process.stdout.write("Extracting the archive...\n");
-                return index.extract(obj.destination);
+                return index.extract(urls[0]);
             }
         });
     })
-    .catch(function(error) {
-        process.stderr.write("Error downloading Firefox: "+error.red+"\n");
+    .catch((error) => {
+        process.stderr.write("Error downloading Firefox: "+error.toString().red+"\n");
     });
 }

@@ -1,25 +1,21 @@
 {
     "android": {
-        "defaultArch": "arm-v11",
-        "mdu": false,
+        "defaultArch": "arm-v15",
+        "type": "classic",
         "arches": {
             "arm-v11": {
-                "path": "mobile/nightly/latest-mozilla-central-android-api-11/",
-                "fileEnding": ".android-arm.apk"
-            },
-            "arm-v9": {
-                "path": "mobile/nightly/latest-mozilla-central-android-api-9/",
+                "path": "mobile/nightly/latest-mozilla-central-android-api-15/",
                 "fileEnding": ".android-arm.apk"
             },
             "x86": {
-                "path": "mobile/nightly/latest-mozilla-entral-android-x86/",
+                "path": "mobile/nightly/latest-mozilla-central-android-x86/",
                 "fileEnding": ".android-i386.apk"
             }
         }
     },
     "linux": {
         "defaultArch": "x86_64",
-        "mdu": true,
+        "type": "mdu",
         "arches": {
             "x86_64": {
                 "platform": "linux64"
@@ -31,7 +27,7 @@
     },
     "mac": {
         "defaultArch": "multi",
-        "mdu": true,
+        "type": "mdu",
         "arches": {
             "multi": {
                 "platform": "osx"
@@ -40,13 +36,24 @@
     },
     "win": {
         "defaultArch": "x86_64",
-        "mdu": true,
+        "type": "mdu",
         "arches": {
             "x86_64": {
                 "platform": "win64"
             },
             "x86": {
                 "platform": "win"
+            }
+        }
+    },
+    "linux-add-on-devel": {
+        "defaultArch": "x86_64",
+        "type": "taskcluster",
+        "arches": {
+            "x86_64": {
+                "namespace": "gecko.v2.mozilla-release.latest.firefox.linux64-add-on-devel",
+                "path": "/artifacts/",
+                "fileEnding": ".tar.bz2"
             }
         }
     }

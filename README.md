@@ -1,5 +1,5 @@
 # get-firefox
-[![Dependency Status](https://dependencyci.com/github/freaktechnik/get-firefox/badge)](https://dependencyci.com/github/freaktechnik/get-firefox)
+[![Build Status](https://travis-ci.org/freaktechnik/get-firefox.svg?branch=master)](https://travis-ci.org/freaktechnik/get-firefox) [![Dependency Status](https://dependencyci.com/github/freaktechnik/get-firefox/badge)](https://dependencyci.com/github/freaktechnik/get-firefox)
 
 Download the latest Firefox from the command line. Currently only desktop and
 android nightlies.
@@ -23,26 +23,9 @@ Run `get-firefox --help` for a complete description of possible options.
 ```js
 var getFirefox = require("get-firefox");
 ```
-The main module implements three public methods.
-
-### getNightlyLocation(platform, architecture)
-Returns a promise that resolves with an URL pointing to the file to download.
-
-### downloadNightly(source, destination, progressCallback)
-Downloads a file from source and saves it in destination. Returns a promise.
-The progress callback is called with a state object with the following structure:
-```js
-{
-  total: 1000, // Total size in bytes
-  received: 500, // Received size in bytes
-  percent: 0.5 // Percentage received
-}
-```
-
-### extract(filePath)
-Extracts the file in `filePath` in place. Currently supports zip, tar, tar.gz
-and tar.bz2 archives.
+The main module implements a few public methods, see the binary file for their usage.
 
 ## License
 The source code in this package is licensed under the MPL-2.0. A copy of the
 license text can be found in the [LICENSE](LICENSE) file.
+

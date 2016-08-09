@@ -7,7 +7,8 @@
         "ecmaVersion": 6
     },
     "plugins": [
-        "jsdoc"
+        "jsdoc",
+        "node"
     ],
     "rules": {
         "jsdoc/check-param-names": 2,
@@ -28,7 +29,7 @@
         }],
         "indent": ["error", 4],
         "array-callback-return": 2,
-        "consistent-return": 2,
+        "consistent-return": 1,
         "curly": ["error", "all"],
         "default-case": 2,
         "dot-location": [2, "property"],
@@ -99,7 +100,8 @@
         "object-shorthand": 1,
         "prefer-arrow-callback": 1,
         "prefer-const": 1,
-        "no-loop-func": 1
+        "no-loop-func": 1,
+        "strict": 1
     },
-    "extends": "eslint:recommended"
+    "extends": ["eslint:recommended", "plugin:node/recommended"]
 }

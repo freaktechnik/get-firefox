@@ -259,7 +259,7 @@
                 }
             },
             "aurora": {
-                "defaultArch": "x86_64",
+                "defaultArch": "multi",
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
@@ -280,7 +280,7 @@
                 }
             },
             "beta": {
-                "defaultArch": "x86_64",
+                "defaultArch": "multi",
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
@@ -301,7 +301,7 @@
                 }
             },
             "release": {
-                "defaultArch": "x86_64",
+                "defaultArch": "multi",
                 "type": "mdu",
                 "arches": {
                     "x86_64": {

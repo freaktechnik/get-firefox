@@ -1,11 +1,12 @@
-/*
- * Licensed under the MPL-2.0
+/**
+ * @license MPL-2.0
+ * @todo win zips vs. installers
+ * @todo verify checksum file signature...
+ * @todo fennec nightly via mdu
+ * @module get-firefox
  */
 
-//TODO win zips vs. installers
-//TODO multiple release channels/branches
-//TODO verify checksum file signature...
-//TODO fennec nightly via mdu
+"use strict";
 
 const fs = require("fs"),
     Promise = require("any-promise"),
@@ -18,10 +19,22 @@ const fs = require("fs"),
     TaskclusterContainer = require("./lib/taskcluster-container"),
 
     /**
-     * @typedef {Object} Container
-     * @property {function} getChecksums
-     * @property {function} getFileName
-     * @property {function} getFileURL
+     * Container for all the logic do determine download URL, file name and
+     * checksums for different kinds of sources.
+     *
+     * @interface Container
+     */
+    /**
+     * @function Container#getChecksums
+     * @async
+     */
+    /**
+     * @function Container#getFileName
+     * @async
+     */
+    /*
+     * @function Container#getFileURL
+     * @async
      */
 
     PLATFORMS = require("./lib/platforms.json"),
@@ -29,10 +42,12 @@ const fs = require("fs"),
 
     normalizeSystem = (system) => {
         if(!system || !(system in PLATFORMS)) {
+            const defaultPlatform = exports.getDefaultSystem();
             if(system) {
-                console.warn("Unknown platform '" + system + "', defaulting to linux");
+
+                console.warn("Unknown platform '" + system + "', defaulting to " + defaultPlatform);
             }
-            return "linux";
+            return defaultPlatform;
         }
         else {
             return system;
@@ -112,12 +127,32 @@ const fs = require("fs"),
     };
 
 /**
+ * Get the best-matching system for the current operating system, falling back
+ * to Linux.
+ *
+ * @returns {string} Best matching operating system name.
+ */
+exports.getDefaultSystem = function() {
+    switch(process.platform) {
+    case "darwin":
+        return "mac";
+    case "win32":
+        return "win";
+    case "android":
+        return "android";
+    default:
+        return "linux";
+    }
+};
+
+/**
  * Get the container to pass to the other methods based on system and arch.
  *
  * @param {string} branch - Firefox release branch.
  * @param {string} system - System name.
  * @param {string} arch - Architecture name.
- * @returns {Container} The container to describe the Firefox to download.
+ * @returns {module:get-firefox~Container} The container to describe the Firefox
+ *                                          to download.
  */
 exports.getContainer = function(branch, system, arch) {
     system = normalizeSystem(system);
@@ -138,7 +173,7 @@ exports.getContainer = function(branch, system, arch) {
 /**
  * Download Firefox to a target location.
  *
- * @param {Container} container - File downloading container.
+ * @param {module:get-firefox~Container} container - File downloading container.
  * @param {string} target - Target file name.
  * @async
  * @throws Whenever something goes wrong. No guaranteed type.
@@ -162,7 +197,7 @@ exports.downloadFirefox = function(container, target) {
 /**
  * Check the checksum of a local file.
  *
- * @param {Container} container - File downloading container.
+ * @param {module:get-firefox~Container} container - File downloading container.
  * @param {string} localName - Local file name.
  * @async
  * @returns {string} If the checksums match or there is no checksums.

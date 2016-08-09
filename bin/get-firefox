@@ -1,14 +1,14 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
+"use strict";
 
-var index = require("../");
-var program = require("commander");
-var path = require('path');
-var pkg = require( path.join(__dirname, "../", 'package.json') );
-var colors = require("colors");
+const index = require("../"),
+    program = require("commander"),
+    pkg = require('../package.json'),
+    colors = require("colors"); // eslint-disable-line
 
 program
     .version(pkg.version)
-    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android|linux-add-on-devel)$/i, 'linux')
+    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android|linux-add-on-devel)$/i, index.getDefaultSystem())
     .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v15)$/)
     .option("-t --target [target]", "target filename, defaults to the remote filename")
     .option("-c --check", "check the checksum for the download")
@@ -18,12 +18,21 @@ program
     .parse(process.argv);
 
 if(program.list) {
-    var platforms = require("../lib/platforms.json");
-    var branch, plat, title;
-    for(var p in platforms) {
+    const platforms = require("../lib/platforms.json"),
+        defaultPlatform = index.getDefaultSystem();
+    let branch,
+        plat,
+        title,
+        multipleArches = false;
+    for(const p in platforms) {
         plat = platforms[p];
-        process.stdout.write(p.underline.bold + "\n");
-        for(var b in plat.branches) {
+
+        title = p;
+        if(p == defaultPlatform) {
+            title += " (default)".grey;
+        }
+        process.stdout.write(title.underline.bold + "\n");
+        for(const b in plat.branches) {
             branch = plat.branches[b];
             title = b.bold;
             if(b == plat.defaultBranch) {
@@ -31,9 +40,10 @@ if(program.list) {
                 title += " (default)".grey;
             }
             process.stdout.write(" " + title + "\n");
-            for(var a in branch.arches) {
+            multipleArches = Object.keys(branch.arches).length > 1;
+            for(const a in branch.arches) {
                 title = a;
-                if(a == branch.defaultArch) {
+                if(a == branch.defaultArch && multipleArches) {
                     title += " (default)".grey;
                 }
                 process.stdout.write("   - " + title + "\n");
@@ -44,11 +54,10 @@ if(program.list) {
 }
 else {
     process.stdout.write("Searching latest Firefox...\n");
-    var progress;
 
-    var container = index.getContainer(program.branch, program.platform, program.arch);
+    const container = index.getContainer(program.branch, program.platform, program.arch);
 
-    var promise = Promise.resolve(program.target);
+    let promise = Promise.resolve(program.target);
     if(!program.target) {
         promise = container.getFileName();
     }
@@ -56,11 +65,11 @@ else {
         promise,
         container.getFileURL()
     ]).then((urls) => {
-        process.stdout.write("Downloading from "+ urls[1].blue + " and saving as " + urls[0].blue + "\n");
+        process.stdout.write("Downloading from " + urls[1].blue + " and saving as " + urls[0].blue + "\n");
         return index.downloadFirefox(container, urls[0]).then(() => {
             if(program.check) {
-                return index.check(container, urls[0]).then(function(msg) {
-                    process.stdout.write(msg+"\n");
+                return index.check(container, urls[0]).then((msg) => {
+                    process.stdout.write(msg + "\n");
                 });
             }
         }).then(() => {
@@ -71,6 +80,6 @@ else {
         });
     })
     .catch((error) => {
-        process.stderr.write("Error downloading Firefox: "+error.toString().red+"\n");
+        process.stderr.write("Error downloading Firefox: " + error.toString().red + "\n");
     });
 }

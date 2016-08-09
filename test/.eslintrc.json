@@ -20,6 +20,7 @@
         "jsdoc/require-param-description": 0,
         "jsdoc/require-returns-type": 0,
         "jsdoc/require-returns-description": 0,
+        "node/no-unsupported-features": 0,
         "babel/arrow-parens": 1,
         "babel/generator-star-spacing": 1,
         "arrow-parens": 0,

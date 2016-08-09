@@ -21,12 +21,14 @@
                 "type": "mdu",
                 "arches": {
                     "arm-v15": {
-                        "platform": "android",
-                        "product": "fennec-beta-latest"
+                        "platform": "ANDROID",
+                        "product": "FIREFOX_FOR_ANDROID",
+                        "version": "LATEST_BETA"
                     },
                     "x86": {
-                        "platform": "android-x86",
-                        "product": "fennec-beta-latest"
+                        "platform": "ANDROID_X86",
+                        "product": "FIREFOX_FOR_ANDROID",
+                        "version": "LATEST_BETA"
                     }
                 }
             },
@@ -35,12 +37,14 @@
                 "type": "mdu",
                 "arches": {
                     "arm-v15": {
-                        "platform": "android",
-                        "product": "fennec-latest"
+                        "platform": "ANDROID",
+                        "product": "FIREFOX_FOR_ANDROID",
+                        "version": "LATEST"
                     },
                     "x86": {
-                        "platform": "android-x86",
-                        "product": "fennec-latest"
+                        "platform": "ANDROID_X86",
+                        "product": "FIREFOX_FOR_ANDROID",
+                        "version": "LATEST"
                     }
                 }
             }
@@ -54,12 +58,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "linux64",
-                        "product": "firefox-nightly-latest"
+                        "platform": "LINUX64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     },
                     "x86": {
-                        "platform": "linux",
-                        "product": "firefox-nightly-latest"
+                        "platform": "LINUX32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     }
                 }
             },
@@ -68,12 +74,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "linux64",
-                        "product": "firefox-aurora-latest"
+                        "platform": "LINUX64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA"
                     },
                     "x86": {
-                        "platform": "linux",
-                        "product": "firefox-aurora-latest"
+                        "platform": "LINUX32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA"
                     }
                 }
             },
@@ -82,12 +90,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "linux64",
-                        "product": "firefox-beta-latest"
+                        "platform": "LINUX64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
                     },
                     "x86": {
-                        "platform": "linux",
-                        "product": "firefox-beta-latest"
+                        "platform": "LINUX32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
                     }
                 }
             },
@@ -96,12 +106,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "linux64",
-                        "product": "firefox-latest"
+                        "platform": "LINUX64",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
                     },
                     "x86": {
-                        "platform": "linux",
-                        "product": "firefox-latest"
+                        "platform": "LINUX32",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
                     }
                 }
             },
@@ -110,12 +122,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "linux64",
-                        "product": "firefox-esr-latest"
+                        "platform": "LINUX64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
                     },
                     "x86": {
-                        "platform": "linux",
-                        "product": "firefox-esr-latest"
+                        "platform": "LINUX32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
                     }
                 }
             },
@@ -151,8 +165,9 @@
                 "type": "mdu",
                 "arches": {
                     "multi": {
-                        "platform": "osx",
-                        "product": "firefox-nightly-latest"
+                        "platform": "MACOSX",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     }
                 }
             },
@@ -161,8 +176,9 @@
                 "type": "mdu",
                 "arches": {
                     "multi": {
-                        "platform": "osx",
-                        "product": "firefox-aurora-latest"
+                        "platform": "MACOSX",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA"
                     }
                 }
             },
@@ -171,8 +187,9 @@
                 "type": "mdu",
                 "arches": {
                     "multi": {
-                        "platform": "osx",
-                        "product": "firefox-beta-latest"
+                        "platform": "MACOSX",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
                     }
                 }
             },
@@ -181,8 +198,9 @@
                 "type": "mdu",
                 "arches": {
                     "multi": {
-                        "platform": "osx",
-                        "product": "firefox-latest"
+                        "platform": "MACOSX",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
                     }
                 }
             },
@@ -191,8 +209,9 @@
                 "type": "mdu",
                 "arches": {
                     "multi": {
-                        "platform": "osx",
-                        "product": "firefox-esr-latest"
+                        "platform": "MACOSX",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
                     }
                 }
             },
@@ -228,12 +247,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "win64",
-                        "product": "firefox-nightly-latest"
+                        "platform": "WIN64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     },
                     "x86": {
-                        "platform": "win",
-                        "product": "firefox-nightly-latest"
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     }
                 }
             },
@@ -242,12 +263,19 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "win64",
-                        "product": "firefox-aurora-latest"
+                        "platform": "WIN64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA"
                     },
                     "x86": {
-                        "platform": "win",
-                        "product": "firefox-aurora-latest"
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA"
+                    },
+                    "multi": {
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_AURORA_STUB"
                     }
                 }
             },
@@ -256,12 +284,19 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "win64",
-                        "product": "firefox-beta-latest"
+                        "platform": "WIN64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
                     },
                     "x86": {
-                        "platform": "win",
-                        "product": "firefox-beta-latest"
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
+                    },
+                    "multi": {
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA_STUB"
                     }
                 }
             },
@@ -270,12 +305,19 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "win64",
-                        "product": "firefox-latest"
+                        "platform": "WIN64",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
                     },
                     "x86": {
-                        "platform": "win",
-                        "product": "firefox-latest"
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
+                    },
+                    "multi": {
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_STUB"
                     }
                 }
             },
@@ -284,12 +326,14 @@
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
-                        "platform": "win64",
-                        "product": "firefox-esr-latest"
+                        "platform": "WIN64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
                     },
                     "x86": {
-                        "platform": "win",
-                        "product": "firefox-esr-latest"
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
                     }
                 }
             },

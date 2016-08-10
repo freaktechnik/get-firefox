@@ -334,7 +334,7 @@
                 }
             },
             "unbranded-release": {
-                "defaultArchw": "x86_64",
+                "defaultArch": "x86_64",
                 "type": "taskcluster",
                 "arches": {
                     "x86_64": {

@@ -78,8 +78,8 @@ const platformStructure = (t, platform) => {
         });
     });
 };
-platformStructure.title = (providedTitle, platform) => `${platform} structure`;
+platformStructure.title = (providedTitle, platform) => `${providedTitle} structure`;
 
 Object.keys(platforms).forEach((p) => {
-    test(platformStructure, platforms[p]);
+    test(p, platformStructure, platforms[p]);
 });

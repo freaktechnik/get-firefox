@@ -96,19 +96,12 @@ const fs = require("fs"),
     },
     writeFile = (target, buffer) => {
         return new Promise((resolve, reject) => {
-            fs.open(target, 'w', (err, fd) => {
+            fs.writeFile(target, buffer, (err, fd) => {
                 if(err) {
                     reject(err);
                 }
                 else {
-                    fs.write(fd, buffer, 0, buffer.length, (err) => {
-                        if(err) {
-                            reject(err);
-                        }
-                        else {
-                            resolve();
-                        }
-                    });
+                     resolve();
                 }
             });
         });

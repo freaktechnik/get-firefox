@@ -54,7 +54,7 @@ if(program.list) {
     }
 }
 else {
-    process.stdout.write("Searching latest Firefox...\n");
+    process.stdout.write("Searching latest Firefox\n");
 
     const container = index.getContainer(program.branch, program.platform, program.arch);
 
@@ -75,7 +75,7 @@ else {
             }
         }).then(() => {
             if(program.extract) {
-                process.stdout.write("Extracting the archive...\n");
+                process.stdout.write("Extracting the archive to " + (program.extractTo || "./").blue + "\n");
                 return index.extract(urls[0], program.extractTo);
             }
         });

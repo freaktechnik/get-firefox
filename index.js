@@ -221,13 +221,15 @@ exports.check = function(container, localName) {
  * Extract a Firefox archive.
  *
  * @param {string} file - Local file name.
+ * @param {string} [targetDir="."] - Directory to extract into. Defaults to the CWD.
  * @async
  * @throws When decompression fails
  * @returns As soon as decompression is done.
  */
-exports.extract = function(file) {
+exports.extract = function(file, targetDir) {
+    targetDir = targetDir || ".";
     if(file.indexOf(".dmg") == -1) {
-        return decompress(file, '.');
+        return decompress(file, targetDir);
     }
     else {
         return Promise.reject("DMG extraction not implemented");

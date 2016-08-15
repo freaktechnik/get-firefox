@@ -15,6 +15,7 @@ program
     .option("-e --extract", "extract archive after download")
     .option("-l --list", "list all platforms and architectures")
     .option("-b --branch [branch]", "release branch to fetch", /^(unbranded-)?(nightly|aurora|beta|release|esr)$/, 'nightly')
+    .option("--extract-to [folder]", "target folder to extract the archive into")
     .parse(process.argv);
 
 if(program.list) {
@@ -75,7 +76,7 @@ else {
         }).then(() => {
             if(program.extract) {
                 process.stdout.write("Extracting the archive...\n");
-                return index.extract(urls[0]);
+                return index.extract(urls[0], program.extractTo);
             }
         });
     })

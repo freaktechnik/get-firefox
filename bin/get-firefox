@@ -2,7 +2,10 @@
 "use strict";
 
 const index = require("../"),
+    Promise = require("any-promise"),
+    co = require("co"),
     program = require("commander"),
+    streamToPromise = require("stream-to-promise"),
     pkg = require('../package.json'),
     colors = require("colors"); // eslint-disable-line
 
@@ -10,12 +13,11 @@ program
     .version(pkg.version)
     .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android|linux-add-on-devel)$/i, index.getDefaultSystem())
     .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v15)$/)
-    .option("-t --target [target]", "target filename, defaults to the remote filename")
+    .option("-t --target [target]", "target filename or folder when extracting; defaults to the remote filename")
     .option("-c --check", "check the checksum for the download")
     .option("-e --extract", "extract archive after download")
     .option("-l --list", "list all platforms and architectures")
     .option("-b --branch [branch]", "release branch to fetch", /^(unbranded-)?(nightly|aurora|beta|release|esr)$/, 'nightly')
-    .option("--extract-to [folder]", "target folder to extract the archive into")
     .parse(process.argv);
 
 if(program.list) {
@@ -54,33 +56,55 @@ if(program.list) {
     }
 }
 else {
-    process.stdout.write("Searching latest Firefox\n");
+    co(function* () {
+        process.stdout.write("Searching latest Firefox\n");
 
-    const container = index.getContainer(program.branch, program.platform, program.arch);
+        const container = index.getContainer(program.branch, program.platform, program.arch),
+            promises = [
+                container.getFileName(),
+                container.getFileURL()
+            ];
 
-    let promise = Promise.resolve(program.target);
-    if(!program.target) {
-        promise = container.getFileName();
-    }
-    return Promise.all([
-        promise,
-        container.getFileURL()
-    ]).then((urls) => {
-        process.stdout.write("Downloading from " + urls[1].blue + " and saving as " + urls[0].blue + "\n");
-        return index.downloadFirefox(container, urls[0]).then(() => {
-            if(program.check) {
-                return index.check(container, urls[0]).then((msg) => {
-                    process.stdout.write(msg + "\n");
-                });
-            }
-        }).then(() => {
-            if(program.extract) {
-                process.stdout.write("Extracting the archive to " + (program.extractTo || "./").blue + "\n");
-                return index.extract(urls[0], program.extractTo);
-            }
-        });
-    })
-    .catch((error) => {
+        if(program.check) {
+            promises.push(container.getChecksums().catch((e) => {
+                if(!e) {
+                    process.stdout.write("No checksums available");
+                    return false;
+                }
+                else {
+                    throw e;
+                }
+            }));
+        }
+        const urls = yield Promise.all(promises);
+
+        process.stdout.write("Downloading from " + urls[1].blue + "\n");
+        let stream = yield index.downloadFirefox(container);
+        if(program.check && urls[2]) {
+            stream = index.check(stream, urls[0], urls[2]);
+        }
+
+        return Promise.all([
+            streamToPromise(stream).then(() => {
+                if(program.check && urls[2]) {
+                    process.stdout.write("Checksum matches\n");
+                }
+            }),
+            (() => {
+                if(program.extract) {
+                    return streamToPromise(stream).then((buffer) => {
+                        process.stdout.write("Extracting the archive to " + (program.target || "./").blue + "\n");
+                        return index.extract(buffer, program.target);
+                    });
+                }
+                else {
+                    const saveAs = program.target || urls[0];
+                    process.stdout.write("Saving as " + saveAs.blue + "\n");
+                    return index.writeFile(saveAs, stream);
+                }
+            })()
+        ]);
+    }).catch((error) => {
         process.stderr.write("Error downloading Firefox: " + error.toString().red + "\n");
     });
 }

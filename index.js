@@ -10,7 +10,7 @@
 
 const fs = require("fs"),
     Promise = require("any-promise"),
-    checksum = require("checksum"),
+    sha = require("sha"),
     decompress = require("decompress"),
     fetch = require("node-fetch"),
 
@@ -67,57 +67,56 @@ const fs = require("fs"),
     getDownloadInfo = (branch, system) => {
         return PLATFORMS[system].branches[branch];
     },
-    getFileChecksum = (container) => {
-        return container.getChecksums().then((file) => {
-            if(!file) {
-                throw "No checksums.";
+    getFileChecksum = (filename, file) => {
+        if(!file) {
+            throw new Error("No checksums available");
+        }
+        else {
+            let sum, meta;
+            file.split("\n").some((line) => {
+                meta = line.split(" ");
+                if(meta[1] == "sha512" && meta[3].split("/").pop() == filename) {
+                    sum = meta[0];
+                    return true;
+                }
+                return false;
+            });
+
+            if(!sum) {
+                throw new Error("Could not find a checksum for " + filename);
             }
             else {
-                return container.getFileName().then((filename) => {
-                    let sum, meta;
-                    file.split("\n").some((line) => {
-                        meta = line.split(" ");
-                        if(meta[1] == "sha512" && meta[3].split("/").pop() == filename) {
-                            sum = meta[0];
-                            return true;
-                        }
-                        return false;
-                    });
-
-                    if(!sum) {
-                        throw "Could not find a checksum for " + filename;
-                    }
-                    else {
-                        return sum;
-                    }
-                });
+                return sum;
             }
-        });
+        }
     },
-    writeFile = (target, buffer) => {
-        return new Promise((resolve, reject) => {
-            fs.writeFile(target, buffer, (err) => {
-                if(err) {
-                    reject(err);
-                }
-                else {
-                    resolve();
-                }
-            });
-        });
-    },
-    calculateChecksum = (target) => {
-        return new Promise((resolve, reject) => {
-            checksum.file(target, { algorithm: 'sha512' }, (e, cs) => {
-                if(!e) {
-                    resolve(cs);
-                }
-                else {
-                    reject(e);
-                }
-            });
-        });
+    calculateChecksum = (stream, expected) => {
+        return stream.pipe(sha.stream(expected, {
+            algorithm: "sha512"
+        }));
     };
+
+/**
+ * Save a stream to disk.
+ *
+ * @param {string} target - File name in the local system.
+ * @param {Stream} stream - Stream to save to disk.
+ * @async
+ * @throws If writing the stream fails.
+ * @returns {string} Path the file was written to as soon as the file is written.
+ */
+exports.writeFile = (target, stream) => {
+    return new Promise((resolve, reject) => {
+        const outputStream = fs.createWriteStream(target);
+        outputStream.on('error', (e) => {
+            reject(e);
+            stream.unpipe(outputStream);
+            outputStream.end();
+        });
+        outputStream.on('finish', () => resolve(target));
+        stream.pipe(outputStream);
+    });
+};
 
 /**
  * Get the best-matching system for the current operating system, falling back
@@ -166,61 +165,41 @@ exports.getContainer = function(branch, system, arch) {
 /**
  * Download Firefox to a target location.
  *
- * @param {module:get-firefox~Container} container - File downloading container.
- * @param {string} target - Target file name.
+ * @param {module:get-firefox~Container} container - File downloading container..
  * @async
  * @throws Whenever something goes wrong. No guaranteed type.
- * @returns Resolves as soon as the file is written.
+ * @returns {Object} Resolves as soon as the file is written.
  */
-exports.downloadFirefox = function(container, target) {
+exports.downloadFirefox = function(container) {
     return container.getFileURL().then((url) => {
         return fetch(url);
     }).then((response) => {
         if(response.ok) {
-            return response.buffer();
+            return response.body;
         }
         else {
             throw "Could not download Firefox: " + response.statusText;
         }
-    }).then((buffer) => {
-        return writeFile(target, buffer);
     });
 };
 
 /**
  * Check the checksum of a local file.
  *
- * @param {module:get-firefox~Container} container - File downloading container.
- * @param {string} localName - Local file name.
+ * @param {Stream} fileStream - Stream of the downloaded file.
+ * @param {string} targetName - Name of the remote file.
+ * @param {string} sum - Checksum the file should match.
  * @async
- * @returns {string} If the checksums match or there is no checksums.
- * @throws On a checksum mismatch or an error getting the checksums.
+ * @returns {Stream} A Stream that errors if the hash does not match.
  */
-exports.check = function(container, localName) {
-    return Promise.all([
-        getFileChecksum(container),
-        calculateChecksum(localName)
-    ]).then((c) => {
-        if(c[0] == c[1]) {
-            return "Checksum matches";
-        }
-        else {
-            throw "Checksum mismatch";
-        }
-    }, (e) => {
-        if(e == "No checksums available") {
-            return e;
-        }
-        else {
-            throw e;
-        }
-    });
+exports.check = function(fileStream, targetName, sum) {
+    return calculateChecksum(fileStream, getFileChecksum(targetName, sum));
 };
 
 /**
  * Extract a Firefox archive.
  *
- * @param {string} file - Local file name.
+ * @param {Buffer} file - File to extract.
  * @param {string} [targetDir="."] - Directory to extract into. Defaults to the CWD.
  * @async
  * @throws When decompression fails
@@ -228,11 +207,5 @@ exports.check = function(container, localName) {
  */
 exports.extract = function(file, targetDir) {
     targetDir = targetDir || ".";
-    if(file.indexOf(".dmg") == -1) {
-        return decompress(file, targetDir);
-    }
-    else {
-        return Promise.reject("DMG extraction not implemented");
-        //TODO extract dmg. But I'm too lazy to implement that. There's a dmg module out there.
-    }
+    return decompress(file, targetDir);
 };

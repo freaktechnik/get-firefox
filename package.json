@@ -49,7 +49,7 @@
     "ava": "^0.16.0",
     "codecov": "^1.0.1",
     "eslint": "^3.2.2",
-    "eslint-plugin-freaktechnik": "^1.0.1",
+    "eslint-plugin-freaktechnik": "^2.0.0",
     "nyc": "^8.0.0"
   }
 }

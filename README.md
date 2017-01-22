@@ -1,4 +1,6 @@
 # get-firefox
+
+[![Greenkeeper badge](https://badges.greenkeeper.io/freaktechnik/get-firefox.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/freaktechnik/get-firefox.svg?branch=master)](https://travis-ci.org/freaktechnik/get-firefox) [![codecov.io](https://codecov.io/github/freaktechnik/get-firefox/coverage.svg?branch=master)](https://codecov.io/github/freaktechnik/get-firefox?branch=master) [![Dependency Status](https://dependencyci.com/github/freaktechnik/get-firefox/badge)](https://dependencyci.com/github/freaktechnik/get-firefox)
 
 Download the latest Firefox from the command line. Supports almost any release,

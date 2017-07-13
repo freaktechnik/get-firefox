@@ -46,7 +46,7 @@
     "node": ">=4.0.0"
   },
   "devDependencies": {
-    "ava": "^0.20.0",
+    "ava": "^0.21.0",
     "codecov": "^2.0.1",
     "eslint": "4.2.0",
     "eslint-plugin-freaktechnik": "^2.4.0",

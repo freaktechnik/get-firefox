@@ -19,7 +19,7 @@ const fs = require("fs"),
     TaskclusterContainer = require("./lib/taskcluster-container"),
 
     /**
-     * Container for all the logic do determine download URL, file name and
+     * Container for all the logic to determine download URL, file name and
      * checksums for different kinds of sources.
      *
      * @interface Container
@@ -32,7 +32,7 @@ const fs = require("fs"),
      * @function Container#getFileName
      * @async
      */
-    /*
+    /**
      * @function Container#getFileURL
      * @async
      */
@@ -142,7 +142,7 @@ exports.getDefaultSystem = function() {
  *
  * @param {string} branch - Firefox release branch.
  * @param {string} system - System name.
- * @param {string} arch - Architecture name.
+ * @param {string} [arch] - Architecture name.
  * @returns {module:get-firefox~Container} The container to describe the Firefox
  *                                          to download.
  */
@@ -153,7 +153,7 @@ exports.getContainer = function(branch, system, arch) {
         type = PLATFORMS[system].branches[branch].type,
         Constructor = CONTAINERS.find((c) => c.type == type);
 
-    if(!(arch in spec)) {
+    if(!(arch in spec.arches)) {
         if(arch) {
             console.warn("There is no architecture " + arch + " for " + system + ", defaulting to " + spec.defaultArch);
         }
@@ -203,7 +203,7 @@ exports.check = function(fileStream, targetName, sum) {
  * @param {string} [targetDir="."] - Directory to extract into. Defaults to the CWD.
  * @async
  * @throws When decompression fails
- * @returns As soon as decompression is done.
+ * @returns {?} As soon as decompression is done.
  */
 exports.extract = function(file, targetDir) {
     targetDir = targetDir || ".";

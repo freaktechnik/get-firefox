@@ -1,0 +1,101 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "$id": "https://lab.humanoids.be/get-firefox/schemas/platforms.json",
+    "title": "Firefox download sources",
+    "type": "object",
+    "patternProperties": {
+        "^[a-z]+$": {
+            "type": "object",
+            "properties": {
+                "defaultBranch": {
+                    "type": "string",
+                    "enum": [
+                        "nightly",
+                        "aurora",
+                        "release",
+                        "esr",
+                        "unbranded-release",
+                        "unbranded-beta"
+                    ]
+                },
+                "branches": {
+                    "type": "object",
+                    "patternProperties": {
+                        "nightly|beta|aurora|release|esr|unbranded-release|unbranded-beta": {
+                            "type": "object",
+                            "properties": {
+                                "defaultArch": {
+                                    "type": "string",
+                                    "enum": [
+                                        "multi",
+                                        "x86",
+                                        "x86_64",
+                                        "arm-v15"
+                                    ]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "enum": [
+                                        "classic",
+                                        "mdu",
+                                        "taskcluster"
+                                    ]
+                                },
+                                "arches": {
+                                    "type": "object",
+                                    "patternProperties": {
+                                        "multi|x86(_64)?|arm-v15": {
+                                            "type": "object",
+                                            "properties": {
+                                                "namespace": {
+                                                    "type": "string",
+                                                    "minLength": 3
+                                                },
+                                                "fileEnding": {
+                                                    "type": "string",
+                                                    "pattern": "^\\.[a-z0-9.-]+$"
+                                                },
+                                                "platform": {
+                                                    "type": "string",
+                                                    "pattern": "^[A-Z0-9_]+$"
+                                                },
+                                                "product": {
+                                                    "type": "string",
+                                                    "pattern": "^[A-Z_]+$"
+                                                },
+                                                "version": {
+                                                    "type": "string",
+                                                    "pattern": "^[A-Z0-9_]+$"
+                                                },
+                                                "path": {
+                                                    "type": "string",
+                                                    "minLength": 3,
+                                                    "pattern": "^[a-z0-9/-]+$"
+                                                }
+                                            },
+                                            "minProperties": 2,
+                                            "additionalProperties": false
+                                        }
+                                    }
+                                }
+                            },
+                            "required": [
+                                "defaultArch",
+                                "type",
+                                "arches"
+                            ],
+                            "additionalProperties": false
+                        }
+                    },
+                    "minProperties": 1
+                }
+            },
+            "required": [
+                "defaultBranch",
+                "branches"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "additionalProperties": false
+}

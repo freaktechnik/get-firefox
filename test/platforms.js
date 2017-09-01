@@ -1,6 +1,8 @@
 import test from 'ava';
 import platforms from '../lib/platforms.json';
 import mdu from 'moz-download-url';
+import Ajv from 'ajv';
+import schema from '../schemas/platforms.json';
 
 // I don't like that this is hardcoded, but this is the best I could come up with for now.
 const PROPERTIES = {
@@ -82,4 +84,17 @@ platformStructure.title = (providedTitle) => `${providedTitle} structure`;
 
 Object.keys(platforms).forEach((p) => {
     test(p, platformStructure, platforms[p]);
+});
+
+test('Platforms comply to the schema', (t) => {
+    //TODO schema should check for the presence of the type specific properties
+    const ajv = new Ajv();
+
+    const valid = ajv.validate(schema, platforms);
+    if(!valid) {
+        t.fail(ajv.errorsText());
+    }
+    else {
+        t.true(valid);
+    }
 });

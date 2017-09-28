@@ -1,4 +1,8 @@
-const METHODS = [ "getFileURL", "getFileName", "getChecksums" ];
+const METHODS = [
+    "getFileURL",
+    "getFileName",
+    "getChecksums"
+];
 
 module.exports = (t, Constructor, spec = {}) => {
     t.true("name" in Constructor);

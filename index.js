@@ -9,7 +9,6 @@
 "use strict";
 
 const fs = require("fs"),
-    Promise = require("any-promise"),
     sha = require("sha"),
     decompress = require("decompress"),
     fetch = require("node-fetch"),
@@ -38,63 +37,65 @@ const fs = require("fs"),
      */
 
     PLATFORMS = require("./lib/platforms.json"),
-    CONTAINERS = [ ClassicContainer, MDUContainer, TaskclusterContainer ],
+    CONTAINERS = [
+        ClassicContainer,
+        MDUContainer,
+        TaskclusterContainer
+    ],
 
     normalizeSystem = (system) => {
         if(!system || !(system in PLATFORMS)) {
             const defaultPlatform = exports.getDefaultSystem();
             if(system) {
-
-                console.warn("Unknown platform '" + system + "', defaulting to " + defaultPlatform);
+                console.warn(`Unknown platform '${system}', defaulting to ${defaultPlatform}`);
             }
             return defaultPlatform;
         }
-        else {
-            return system;
-        }
+
+        return system;
     },
     normalizeBranch = (branch, system) => {
         if(!branch || !(branch in PLATFORMS[system].branches)) {
             if(branch) {
-                console.warn("Unknown branch '" + branch + "', defaulting to " + PLATFORMS[system].defaultBranch);
+                console.warn(`Unknown branch '${branch}', defaulting to ${PLATFORMS[system].defaultBranch}`);
             }
             return PLATFORMS[system].defaultBranch;
         }
-        else {
-            return branch;
-        }
+
+        return branch;
     },
-    getDownloadInfo = (branch, system) => {
-        return PLATFORMS[system].branches[branch];
-    },
+    getDownloadInfo = (branch, system) => PLATFORMS[system].branches[branch],
     getFileChecksum = (filename, file) => {
         if(!file) {
             throw new Error("No checksums available");
         }
         else {
-            let sum, meta;
+            let sum;
             file.split("\n").some((line) => {
-                meta = line.split(" ");
-                if(meta[1] == "sha512" && meta[3].split("/").pop() == filename) {
-                    sum = meta[0];
+                const [
+                    s,
+                    type,
+                    b, // eslint-disable-line no-unused-vars
+                    path
+                ] = line.split(" ");
+                if(type == "sha512" && path.split("/").pop() == filename) {
+                    sum = s;
                     return true;
                 }
                 return false;
             });
 
             if(!sum) {
-                throw new Error("Could not find a checksum for " + filename);
+                throw new Error(`Could not find a checksum for ${filename}`);
             }
             else {
                 return sum;
             }
         }
     },
-    calculateChecksum = (stream, expected) => {
-        return stream.pipe(sha.stream(expected, {
-            algorithm: "sha512"
-        }));
-    };
+    calculateChecksum = (stream, expected) => stream.pipe(sha.stream(expected, {
+        algorithm: "sha512"
+    }));
 
 /**
  * Save a stream to disk.
@@ -105,18 +106,16 @@ const fs = require("fs"),
  * @throws If writing the stream fails.
  * @returns {string} Path the file was written to as soon as the file is written.
  */
-exports.writeFile = (target, stream) => {
-    return new Promise((resolve, reject) => {
-        const outputStream = fs.createWriteStream(target);
-        outputStream.on('error', (e) => {
-            reject(e);
-            stream.unpipe(outputStream);
-            outputStream.end();
-        });
-        outputStream.on('finish', () => resolve(target));
-        stream.pipe(outputStream);
+exports.writeFile = (target, stream) => new Promise((resolve, reject) => {
+    const outputStream = fs.createWriteStream(target);
+    outputStream.on('error', (e) => {
+        reject(e);
+        stream.unpipe(outputStream);
+        outputStream.end();
     });
-};
+    outputStream.on('finish', () => resolve(target));
+    stream.pipe(outputStream);
+});
 
 /**
  * Get the best-matching system for the current operating system, falling back
@@ -155,7 +154,7 @@ exports.getContainer = function(branch, system, arch) {
 
     if(!(arch in spec.arches)) {
         if(arch) {
-            console.warn("There is no architecture " + arch + " for " + system + ", defaulting to " + spec.defaultArch);
+            console.warn(`There is no architecture ${arch} for ${system}, defaulting to ${spec.defaultArch}`);
         }
         arch = spec.defaultArch;
     }
@@ -171,16 +170,14 @@ exports.getContainer = function(branch, system, arch) {
  * @returns {Object} Resolves as soon as the file is written.
  */
 exports.downloadFirefox = function(container) {
-    return container.getFileURL().then((url) => {
-        return fetch(url);
-    }).then((response) => {
-        if(response.ok) {
-            return response.body;
-        }
-        else {
-            throw "Could not download Firefox: " + response.statusText;
-        }
-    });
+    return container.getFileURL().then((url) => fetch(url))
+        .then((response) => {
+            if(response.ok) {
+                return response.body;
+            }
+
+            throw `Could not download Firefox: ${response.statusText}`;
+        });
 };
 
 /**

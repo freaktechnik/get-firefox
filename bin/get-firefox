@@ -2,12 +2,10 @@
 "use strict";
 
 const index = require("../"),
-    Promise = require("any-promise"),
-    co = require("co"),
     program = require("commander"),
     streamToPromise = require("stream-to-promise"),
     pkg = require('../package.json'),
-    colors = require("colors"); // eslint-disable-line
+    colors = require("colors"); // eslint-disable-line no-unused-vars
 
 program
     .version(pkg.version)
@@ -34,7 +32,7 @@ if(program.list) {
         if(p == defaultPlatform) {
             title += " (default)".grey;
         }
-        process.stdout.write(title.underline.bold + "\n");
+        process.stdout.write(`${title.underline.bold}\n`);
         for(const b in plat.branches) {
             branch = plat.branches[b];
             title = b.bold;
@@ -42,21 +40,21 @@ if(program.list) {
                 title = title.yellow;
                 title += " (default)".grey;
             }
-            process.stdout.write(" " + title + "\n");
-            multipleArches = Object.keys(branch.arches).length > 1;
+            process.stdout.write(` ${title}\n`);
+            multipleArches = Object.keys(branch.arches).length;
             for(const a in branch.arches) {
                 title = a;
                 if(a == branch.defaultArch && multipleArches) {
                     title += " (default)".grey;
                 }
-                process.stdout.write("   - " + title + "\n");
+                process.stdout.write(`   - ${title}\n`);
             }
         }
         process.stdout.write("\n");
     }
 }
 else {
-    co(function* () {
+    (async () => {
         process.stdout.write("Searching latest Firefox\n");
 
         const container = index.getContainer(program.branch, program.platform, program.arch),
@@ -71,40 +69,42 @@ else {
                     process.stdout.write("No checksums available");
                     return false;
                 }
-                else {
-                    throw e;
-                }
+
+                throw e;
             }));
         }
-        const urls = yield Promise.all(promises);
+        const [
+            fileName,
+            fileURL,
+            checksums
+        ] = await Promise.all(promises);
 
-        process.stdout.write("Downloading from " + urls[1].blue + "\n");
-        let stream = yield index.downloadFirefox(container);
-        if(program.check && urls[2]) {
-            stream = index.check(stream, urls[0], urls[2]);
+        process.stdout.write(`Downloading from ${fileURL.blue}\n`);
+        let stream = await index.downloadFirefox(container);
+        if(program.check && checksums) {
+            stream = index.check(stream, fileName, checksums);
         }
 
         return Promise.all([
             streamToPromise(stream).then(() => {
-                if(program.check && urls[2]) {
+                if(program.check && checksums) {
                     process.stdout.write("Checksum matches\n");
                 }
             }),
             (() => {
                 if(program.extract) {
                     return streamToPromise(stream).then((buffer) => {
-                        process.stdout.write("Extracting the archive to " + (program.target || "./").blue + "\n");
+                        process.stdout.write(`Extracting the archive to ${(program.target || "./").blue}\n`);
                         return index.extract(buffer, program.target);
                     });
                 }
-                else {
-                    const saveAs = program.target || urls[0];
-                    process.stdout.write("Saving as " + saveAs.blue + "\n");
-                    return index.writeFile(saveAs, stream);
-                }
+
+                const saveAs = program.target || fileName;
+                process.stdout.write(`Saving as ${saveAs.blue}\n`);
+                return index.writeFile(saveAs, stream);
             })()
         ]);
-    }).catch((error) => {
-        process.stderr.write("Error downloading Firefox: " + error.toString().red + "\n");
+    })().catch((error) => {
+        process.stderr.write(`Error downloading Firefox: ${error.toString().red}\n`);
     });
 }

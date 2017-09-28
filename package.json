@@ -4,7 +4,7 @@
   "description": "Download the latest Firefox from the command line",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint index.js lib/ bin/get-firefox test/",
+    "lint": "eslint index.js lib/ bin/get-firefox test/ --ext js,json",
     "test": "npm run lint && nyc ava",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov"
   },

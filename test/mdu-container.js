@@ -8,11 +8,8 @@ test("MDUContainer interface check", testContainer, MDUContainer, {
     version: "LATEST"
 });
 
-test("Get Checksums rejects", async (t) => {
+test("Get Checksums rejects", (t) => {
     const container = new MDUContainer({});
 
-    const reason = await container.getChecksums().then(() => {
-        throw "Should reject";
-    }, (e) => e);
-    t.false(reason);
+    return t.throws(container.getChecksums(), Error, "No checksums available");
 });

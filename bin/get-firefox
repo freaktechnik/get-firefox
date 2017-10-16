@@ -65,8 +65,8 @@ else {
 
         if(program.check) {
             promises.push(container.getChecksums().catch((e) => {
-                if(!e) {
-                    process.stdout.write("No checksums available");
+                if(e.message === "No checksums available") {
+                    process.stdout.write(e.message);
                     return false;
                 }
 

@@ -149,7 +149,7 @@ exports.getContainer = function(branch, system, arch) {
     system = normalizeSystem(system);
     branch = normalizeBranch(branch, system);
     const spec = getDownloadInfo(branch, system),
-        type = PLATFORMS[system].branches[branch].type,
+        { type } = PLATFORMS[system].branches[branch],
         Constructor = CONTAINERS.find((c) => c.type == type);
 
     if(!(arch in spec.arches)) {
@@ -176,7 +176,7 @@ exports.downloadFirefox = function(container) {
                 return response.body;
             }
 
-            throw `Could not download Firefox: ${response.statusText}`;
+            throw new Error(`Could not download Firefox: ${response.statusText}`);
         });
 };
 

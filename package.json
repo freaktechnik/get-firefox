@@ -44,7 +44,7 @@
     "node": ">=8.6.0"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^5.2.1",
+    "@freaktechnik/eslint-config-node": "^6.0.0",
     "@freaktechnik/eslint-config-test": "^6.0.0",
     "ajv": "^5.2.4",
     "ava": "^0.23.0",

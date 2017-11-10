@@ -2,23 +2,55 @@
 "use strict";
 
 const index = require("../"),
-    program = require("commander"),
+    meow = require("meow"),
     streamToPromise = require("stream-to-promise"),
-    pkg = require('../package.json'),
-    colors = require("colors"); // eslint-disable-line no-unused-vars
+    chalk = require("chalk"),
+    Listr = require("listr"),
+    cli = meow(`
+    Usage
+        $ get-firefox
 
-program
-    .version(pkg.version)
-    .option("-p --platform <platform>", "platform of the Firefox version", /^(win|mac|linux|android|linux-add-on-devel)$/i, index.getDefaultSystem())
-    .option("-a --architecture [arch]", "platform architecture", /^(x86(_64)?|multi|arm-v15)$/)
-    .option("-t --target [target]", "target filename or folder when extracting; defaults to the remote filename")
-    .option("-c --check", "check the checksum for the download")
-    .option("-e --extract", "extract archive after download")
-    .option("-l --list", "list all platforms and architectures")
-    .option("-b --branch [branch]", "release branch to fetch", /^(nightly|devedition|beta|release|esr|unbranded-release)$/, 'nightly')
-    .parse(process.argv);
+    Options
+        -p, --platform <platform>    Platform of the Firefox version
+        -a, --architecture <arch>    Platform architecture
+        -t, --target                 Target file name or folder when extracting; defaults to the remote file name
+        -c, --check                  Verify file checksums
+        -e, --extract                Extract archive after download
+        -l, --list                   List all platforms and architectures
+        -b, --branch <branch>        Release branch to fetch
+        -h, --help                   This output
 
-if(program.list) {
+    Examples
+        $ get-firefox --platform android --target fennec.apk --architecture arm-v11
+`, {
+            alias: {
+                a: 'architecture',
+                b: 'branch',
+                c: 'check',
+                e: 'extract',
+                h: 'help',
+                l: 'list',
+                p: 'platform',
+                t: 'target'
+            },
+            default: {
+                platform: index.getDefaultSystem(),
+                branch: "nightly"
+            },
+            string: [
+                'platform',
+                'architecture',
+                'target',
+                'branch'
+            ],
+            boolean: [
+                'check',
+                'extract',
+                'list'
+            ]
+        });
+
+if(cli.flags.list) {
     const platforms = require("../lib/platforms.json"),
         defaultPlatform = index.getDefaultSystem();
     let branch,
@@ -30,22 +62,22 @@ if(program.list) {
 
         title = p;
         if(p == defaultPlatform) {
-            title += " (default)".grey;
+            title += chalk.gray(" (default)");
         }
-        process.stdout.write(`${title.underline.bold}\n`);
+        process.stdout.write(`${chalk.underline.bold(title)}\n`);
         for(const b in plat.branches) {
             branch = plat.branches[b];
-            title = b.bold;
+            title = chalk.bold(b);
             if(b == plat.defaultBranch) {
-                title = title.yellow;
-                title += " (default)".grey;
+                title = chalk.yellow(title);
+                title += chalk.gray(" (default)");
             }
             process.stdout.write(` ${title}\n`);
             multipleArches = Object.keys(branch.arches).length;
             for(const a in branch.arches) {
                 title = a;
                 if(a == branch.defaultArch && multipleArches) {
-                    title += " (default)".grey;
+                    title += chalk.gray(" (default)");
                 }
                 process.stdout.write(`   - ${title}\n`);
             }
@@ -54,57 +86,75 @@ if(program.list) {
     }
 }
 else {
-    (async () => {
-        process.stdout.write("Searching latest Firefox\n");
+    new Listr([
+        {
+            title: "Search latest Firefox",
+            task: async (ctx) => {
+                ctx.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.arch);
+                const promises = [
+                    ctx.container.getFileName(),
+                    ctx.container.getFileURL()
+                ];
+                const [
+                    fileName,
+                    fileURL
+                ] = await Promise.all(promises);
 
-        const container = index.getContainer(program.branch, program.platform, program.arch),
-            promises = [
-                container.getFileName(),
-                container.getFileURL()
-            ];
-
-        if(program.check) {
-            promises.push(container.getChecksums().catch((e) => {
-                if(e.message === "No checksums available") {
-                    process.stdout.write(e.message);
-                    return false;
+                ctx.url = fileURL;
+                ctx.name = fileName;
+            }
+        },
+        {
+            title: "Get checksum",
+            enabled: () => cli.flags.check,
+            task: async (ctx) => {
+                try {
+                    ctx.checksums = await ctx.container.getChecksums();
                 }
-
-                throw e;
-            }));
+                catch(e) {
+                    if(e.message === "No checksums available") {
+                        process.stdout.write(e.message);
+                        ctx.noChecksums = true;
+                    }
+                    else {
+                        throw e;
+                    }
+                }
+            }
+        },
+        {
+            title: "Download",
+            task: async (ctx, task) => {
+                task.output = `Downloading from ${chalk.blue(ctx.url)}`;
+                ctx.stream = await index.downloadFirefox(ctx.container);
+                ctx.buffer = await streamToPromise(ctx.stream);
+            }
+        },
+        {
+            title: "Verify checksum",
+            enabled: () => cli.flags.check,
+            skip: (ctx) => ctx.noChecksums || !ctx.checksums,
+            task: async (ctx) => {
+                ctx.stream = index.check(ctx.stream, ctx.name, ctx.checksums);
+                ctx.buffer = await streamToPromise(ctx.stream);
+            }
+        },
+        {
+            title: "Extract",
+            enabled: () => cli.flags.extract,
+            task: async (ctx, task) => {
+                task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
+                return index.extract(ctx.buffer, cli.flags.target);
+            }
+        },
+        {
+            title: "Write file to disk",
+            enabled: () => !cli.flags.extract,
+            task: (ctx, task) => {
+                const saveAs = cli.flags.target || ctx.name;
+                task.output = `Saving as ${chalk.blue(saveAs)}`;
+                return index.writeFile(saveAs, ctx.stream);
+            }
         }
-        const [
-            fileName,
-            fileURL,
-            checksums
-        ] = await Promise.all(promises);
-
-        process.stdout.write(`Downloading from ${fileURL.blue}\n`);
-        let stream = await index.downloadFirefox(container);
-        if(program.check && checksums) {
-            stream = index.check(stream, fileName, checksums);
-        }
-
-        return Promise.all([
-            streamToPromise(stream).then(() => {
-                if(program.check && checksums) {
-                    process.stdout.write("Checksum matches\n");
-                }
-            }),
-            (() => {
-                if(program.extract) {
-                    return streamToPromise(stream).then((buffer) => {
-                        process.stdout.write(`Extracting the archive to ${(program.target || "./").blue}\n`);
-                        return index.extract(buffer, program.target);
-                    });
-                }
-
-                const saveAs = program.target || fileName;
-                process.stdout.write(`Saving as ${saveAs.blue}\n`);
-                return index.writeFile(saveAs, stream);
-            })()
-        ]);
-    })().catch((error) => {
-        process.stderr.write(`Error downloading Firefox: ${error.toString().red}\n`);
-    });
+    ]).run();
 }

@@ -69,19 +69,19 @@
                     }
                 }
             },
-            "aurora": {
+            "devedition": {
                 "defaultArch": "x86_64",
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
                         "platform": "LINUX64",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA"
+                        "version": "LATEST_DEVEDITION"
                     },
                     "x86": {
                         "platform": "LINUX32",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA"
+                        "version": "LATEST_DEVEDITION"
                     }
                 }
             },
@@ -169,14 +169,14 @@
                     }
                 }
             },
-            "aurora": {
+            "devedition": {
                 "defaultArch": "multi",
                 "type": "mdu",
                 "arches": {
                     "multi": {
                         "platform": "MACOSX",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA"
+                        "version": "LATEST_DEVEDITION"
                     }
                 }
             },
@@ -251,27 +251,32 @@
                         "platform": "WIN32",
                         "product": "FIREFOX",
                         "version": "LATEST_NIGHTLY"
+                    },
+                    "multi": {
+                        "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY_STUB"
                     }
                 }
             },
-            "aurora": {
+            "devedition": {
                 "defaultArch": "multi",
                 "type": "mdu",
                 "arches": {
                     "x86_64": {
                         "platform": "WIN64",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA"
+                        "version": "LATEST_DEVEDITION"
                     },
                     "x86": {
                         "platform": "WIN32",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA"
+                        "version": "LATEST_DEVEDITION"
                     },
                     "multi": {
                         "platform": "WIN32",
                         "product": "FIREFOX",
-                        "version": "LATEST_AURORA_STUB"
+                        "version": "LATEST_DEVEDITION_STUB"
                     }
                 }
             },

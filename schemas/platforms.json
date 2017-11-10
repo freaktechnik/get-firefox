@@ -11,7 +11,8 @@
                     "type": "string",
                     "enum": [
                         "nightly",
-                        "aurora",
+                        "devedition",
+                        "beta",
                         "release",
                         "esr",
                         "unbranded-release",
@@ -21,7 +22,7 @@
                 "branches": {
                     "type": "object",
                     "patternProperties": {
-                        "nightly|beta|aurora|release|esr|unbranded-release|unbranded-beta": {
+                        "nightly|beta|devedition|release|esr|unbranded-release|unbranded-beta": {
                             "type": "object",
                             "properties": {
                                 "defaultArch": {

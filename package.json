@@ -24,7 +24,7 @@
     "colors": "^1.1.2",
     "commander": "^2.11.0",
     "decompress": "^4.2.0",
-    "moz-download-url": "^1.2.0",
+    "moz-download-url": "^2.0.0",
     "node-fetch": "^1.7.3",
     "sha": "^2.0.1",
     "stream-to-promise": "^2.2.0",

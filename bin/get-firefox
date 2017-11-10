@@ -15,7 +15,7 @@ program
     .option("-c --check", "check the checksum for the download")
     .option("-e --extract", "extract archive after download")
     .option("-l --list", "list all platforms and architectures")
-    .option("-b --branch [branch]", "release branch to fetch", /^(unbranded-)?(nightly|devedition|beta|release|esr)$/, 'nightly')
+    .option("-b --branch [branch]", "release branch to fetch", /^(nightly|devedition|beta|release|esr|unbranded-release)$/, 'nightly')
     .parse(process.argv);
 
 if(program.list) {

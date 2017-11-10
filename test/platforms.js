@@ -23,11 +23,10 @@ const PROPERTIES = {
 
 const EXPECTED_BRANCHES = [
     "nightly",
-    "aurora",
+    "devedition",
     "beta",
     "release",
     "esr",
-    "unbranded-beta",
     "unbranded-release"
 ];
 

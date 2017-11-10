@@ -15,14 +15,13 @@
                         "beta",
                         "release",
                         "esr",
-                        "unbranded-release",
-                        "unbranded-beta"
+                        "unbranded-release"
                     ]
                 },
                 "branches": {
                     "type": "object",
                     "patternProperties": {
-                        "nightly|beta|devedition|release|esr|unbranded-release|unbranded-beta": {
+                        "nightly|beta|devedition|release|esr|unbranded-release": {
                             "type": "object",
                             "properties": {
                                 "defaultArch": {

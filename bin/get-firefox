@@ -6,7 +6,8 @@ const index = require("../"),
     streamToPromise = require("stream-to-promise"),
     chalk = require("chalk"),
     Listr = require("listr"),
-    cli = meow(`
+    cli = meow({
+        help: `
     Usage
         $ get-firefox
 
@@ -19,36 +20,52 @@ const index = require("../"),
         -l, --list                   List all platforms and architectures
         -b, --branch <branch>        Release branch to fetch
         -h, --help                   This output
+        -v, --version                Version of the tool
 
     Examples
         $ get-firefox --platform android --target fennec.apk --architecture arm-v11
-`, {
-            alias: {
-                a: 'architecture',
-                b: 'branch',
-                c: 'check',
-                e: 'extract',
-                h: 'help',
-                l: 'list',
-                p: 'platform',
-                t: 'target'
+`,
+        flags: {
+            architecture: {
+                type: "string",
+                alias: "a"
             },
-            default: {
-                platform: index.getDefaultSystem(),
-                branch: "nightly"
+            branch: {
+                type: "string",
+                alias: "b",
+                default: "nightly"
             },
-            string: [
-                'platform',
-                'architecture',
-                'target',
-                'branch'
-            ],
-            boolean: [
-                'check',
-                'extract',
-                'list'
-            ]
-        });
+            check: {
+                type: "boolean",
+                alias: "c"
+            },
+            extract: {
+                type: "boolean",
+                alias: "e"
+            },
+            help: {
+                type: "boolean",
+                alias: "h"
+            },
+            list: {
+                type: "boolean",
+                alias: "l"
+            },
+            platform: {
+                type: "string",
+                alias: "p",
+                default: index.getDefaultSystem()
+            },
+            target: {
+                type: "string",
+                alias: "t"
+            },
+            version: {
+                type: "boolean",
+                alias: "v"
+            }
+        }
+    });
 
 if(cli.flags.list) {
     const platforms = require("../lib/platforms.json"),

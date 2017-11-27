@@ -27,7 +27,7 @@
     "chalk": "^2.3.0",
     "decompress": "^4.2.0",
     "listr": "^0.13.0",
-    "meow": "^3.7.0",
+    "meow": "^4.0.0",
     "moz-download-url": "^2.0.0",
     "node-fetch": "^1.7.3",
     "sha": "^2.0.1",

@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 "use strict";
 
-const index = require("../"),
+const index = require('..'),
     meow = require("meow"),
     streamToPromise = require("stream-to-promise"),
     chalk = require("chalk"),

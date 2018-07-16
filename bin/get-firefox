@@ -109,13 +109,13 @@ else {
             task: async (ctx) => {
                 ctx.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.arch);
                 const promises = [
-                    ctx.container.getFileName(),
-                    ctx.container.getFileURL()
-                ];
-                const [
-                    fileName,
-                    fileURL
-                ] = await Promise.all(promises);
+                        ctx.container.getFileName(),
+                        ctx.container.getFileURL()
+                    ],
+                    [
+                        fileName,
+                        fileURL
+                    ] = await Promise.all(promises);
 
                 ctx.url = fileURL;
                 ctx.name = fileName;

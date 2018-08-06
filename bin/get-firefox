@@ -22,6 +22,7 @@ const index = require('..'),
         -b, --branch <branch>        Release branch to fetch
         -h, --help                   This output
         -v, --version                Version of the tool
+        --verbose                    Don't animate output and show detailed progress log. Enabled by default in CI environments
 
     Examples
         $ get-firefox --platform android --target fennec.apk --architecture arm-v11

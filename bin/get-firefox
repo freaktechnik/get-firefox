@@ -6,6 +6,7 @@ const index = require('..'),
     streamToPromise = require("stream-to-promise"),
     chalk = require("chalk"),
     Listr = require("listr"),
+    isCI = require("is-ci"),
     cli = meow({
         help: `
     Usage
@@ -63,6 +64,10 @@ const index = require('..'),
             version: {
                 type: "boolean",
                 alias: "v"
+            },
+            verbose: {
+                type: "boolean",
+                default: isCI
             }
         }
     });
@@ -173,5 +178,7 @@ else {
                 return index.writeFile(saveAs, ctx.stream);
             }
         }
-    ]).run();
+    ], {
+        renderer: cli.flags.verbose ? 'verbose' : 'default'
+    }).run();
 }

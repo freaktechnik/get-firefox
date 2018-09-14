@@ -158,7 +158,7 @@ else {
             enabled: () => cli.flags.check,
             skip: (ctx) => ctx.noChecksums || !ctx.checksums,
             task: async (ctx) => {
-                ctx.stream = index.check(ctx.stream, ctx.name, ctx.checksums);
+                ctx.stream = index.check(ctx.buffer, ctx.name, ctx.checksums);
                 ctx.buffer = await streamToPromise(ctx.stream);
             }
         },

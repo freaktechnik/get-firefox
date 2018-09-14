@@ -26,6 +26,7 @@
   "dependencies": {
     "chalk": "^2.4.1",
     "decompress": "^4.2.0",
+    "into-stream": "^3.1.0",
     "is-ci": "^1.2.1",
     "listr": "^0.14.2",
     "meow": "^5.0.0",

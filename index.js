@@ -12,6 +12,7 @@ const fs = require("fs"),
     sha = require("sha"),
     decompress = require("decompress"),
     fetch = require("node-fetch"),
+    intoStream = require("into-stream"),
     util = require("util"),
 
     MDUContainer = require("./lib/mdu-container"),
@@ -177,13 +178,14 @@ exports.downloadFirefox = function(container) {
 /**
  * Check the checksum of a local file.
  *
- * @param {Stream} fileStream - Stream of the downloaded file.
+ * @param {Buffer} buffer - Buffer of the downloaded file.
  * @param {string} targetName - Name of the remote file.
  * @param {string} sum - Checksum the file should match.
  * @async
  * @returns {Stream} A Stream that errors if the hash does not match.
  */
-exports.check = function(fileStream, targetName, sum) {
+exports.check = function(buffer, targetName, sum) {
+    const fileStream = intoStream(buffer);
     return calculateChecksum(fileStream, getFileChecksum(targetName, sum));
 };
 

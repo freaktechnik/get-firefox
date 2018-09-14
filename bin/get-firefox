@@ -165,7 +165,7 @@ else {
         {
             title: "Extract",
             enabled: () => cli.flags.extract,
-            task: async (ctx, task) => {
+            task: (ctx, task) => {
                 task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
                 return index.extract(ctx.buffer, cli.flags.target);
             }
@@ -176,7 +176,7 @@ else {
             task: (ctx, task) => {
                 const saveAs = cli.flags.target || ctx.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return index.writeFile(saveAs, ctx.stream);
+                return index.writeFile(saveAs, ctx.buffer);
             }
         }
     ], {

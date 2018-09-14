@@ -12,6 +12,7 @@ const fs = require("fs"),
     sha = require("sha"),
     decompress = require("decompress"),
     fetch = require("node-fetch"),
+    util = require("util"),
 
     MDUContainer = require("./lib/mdu-container"),
     ClassicContainer = require("./lib/classic-container"),
@@ -42,6 +43,8 @@ const fs = require("fs"),
         MDUContainer,
         TaskclusterContainer
     ],
+
+    promisifiedWrite = util.promisify(fs.writeFile),
 
     normalizeSystem = (system) => {
         if(!system || !(system in PLATFORMS)) {
@@ -101,21 +104,12 @@ const fs = require("fs"),
  * Save a stream to disk.
  *
  * @param {string} target - File name in the local system.
- * @param {Stream} stream - Stream to save to disk.
+ * @param {Buffer} buffer - Buffer to save to disk.
  * @async
- * @throws If writing the stream fails.
- * @returns {string} Path the file was written to as soon as the file is written.
+ * @throws If writing the buffer fails.
+ * @returns {undefined}
  */
-exports.writeFile = (target, stream) => new Promise((resolve, reject) => {
-    const outputStream = fs.createWriteStream(target);
-    outputStream.on('error', (e) => {
-        reject(e);
-        stream.unpipe(outputStream);
-        outputStream.end();
-    });
-    outputStream.on('finish', () => resolve(target));
-    stream.pipe(outputStream);
-});
+exports.writeFile = (target, buffer) => promisifiedWrite(target, buffer);
 
 /**
  * Get the best-matching system for the current operating system, falling back

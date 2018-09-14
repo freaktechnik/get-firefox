@@ -130,13 +130,13 @@ else {
         {
             title: "Get checksum",
             enabled: () => cli.flags.check,
-            task: async (ctx) => {
+            task: async (ctx, task) => {
                 try {
                     ctx.checksums = await ctx.container.getChecksums();
                 }
                 catch(e) {
                     if(e.message === "No checksums available") {
-                        process.stdout.write(e.message);
+                        task.output = e.message;
                         ctx.noChecksums = true;
                     }
                     else {

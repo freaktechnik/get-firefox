@@ -4,8 +4,10 @@
   "description": "Download the latest Firefox from the command line",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint index.js lib/ bin/get-firefox test/ --ext js,json",
-    "test": "npm run lint && nyc ava",
+    "lint:js": "eslint index.js lib/ bin/get-firefox test/ --ext js,json",
+    "lint:ec": "eclint check $(git ls-files)",
+    "lint": "npm run lint:js && npm run lint:ec",
+    "test": "nyc ava",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "start": "node bin/get-firefox"
   },
@@ -55,6 +57,7 @@
     "ajv": "^6.5.3",
     "ava": "^0.25.0",
     "codecov": "^3.1.0",
+    "eclint": "^2.8.0",
     "eslint": "^5.5.0",
     "nyc": "^13.0.1",
     "tmp-promise": "^1.0.5"

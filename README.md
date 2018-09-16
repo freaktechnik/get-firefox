@@ -9,25 +9,26 @@ except on Android.
 This package works mostly without relying on
 [archive.mozilla.org](https://archive.mozilla.org).
 
-It determines some file names using a helper file built with the other
-packages, so it might break if the build infrastructure changes.
-
-## Installation
-
-Install this command by running `npm install -g get-firefox`.
-
-## Usage in the command line
-Run `get-firefox --platform android --target fennec.apk --architecture arm-v11`
+## Usage
+### In the command line
+Run `npx get-firefox --platform android --target fennec.apk --architecture arm-v15`
 in the console to download the latest Firefox nightly for Android as `fennec.apk`.
-Currently downloads 64-bit versions only, when there is a choice.
 
-Run `get-firefox --help` for a complete description of possible options.
+Run `npx get-firefox --help` for a complete description of possible options or `npx get-firefox --list`
+for a list of all available platforms, branches and architectures.
 
-## Usage as node module
+The extraction option can not extract `.dmg` or `.exe` packages.
+Use `hidutil`or similar to access the contents of the `.dmg`.
+
+### As node module
 ```js
 var getFirefox = require("get-firefox");
 ```
 The main module implements a few public methods, see the binary file for their usage.
+
+## Similar tools
+- https://github.com/mozilla/mozdownload
+- https://github.com/freaktechnik/moz-download-url
 
 ## License
 The source code in this package is licensed under the MPL-2.0. A copy of the

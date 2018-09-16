@@ -17,7 +17,7 @@ const index = require('..'),
         -a, --architecture <arch>    Platform architecture
         -t, --target                 Target file name or folder when extracting; defaults to the remote file name
         -c, --check                  Verify file checksums
-        -e, --extract                Extract archive after download
+        -e, --extract                Extract archive after download; does not work for dmg and exe files
         -l, --list                   List all platforms and architectures
         -b, --branch <branch>        Release branch to fetch
         -h, --help                   This output

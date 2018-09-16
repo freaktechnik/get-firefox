@@ -18,7 +18,7 @@ Run `npx get-firefox --help` for a complete description of possible options or `
 for a list of all available platforms, branches and architectures.
 
 The extraction option can not extract `.dmg` or `.exe` packages.
-Use `hidutil`or similar to access the contents of the `.dmg`.
+Use `hdiutil`or similar to access the contents of the `.dmg`.
 
 ### As node module
 ```js

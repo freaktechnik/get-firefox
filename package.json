@@ -29,7 +29,7 @@
     "chalk": "^2.4.1",
     "decompress": "^4.2.0",
     "into-stream": "^4.0.0",
-    "is-ci": "^1.2.1",
+    "is-ci": "^2.0.0",
     "listr": "^0.14.2",
     "meow": "^5.0.0",
     "moz-download-url": "^2.0.0",

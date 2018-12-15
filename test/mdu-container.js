@@ -11,5 +11,5 @@ test("MDUContainer interface check", testContainer, MDUContainer, {
 test("Get Checksums rejects", (t) => {
     const container = new MDUContainer({});
 
-    return t.throws(container.getChecksums(), Error, "No checksums available");
+    return t.throwsAsync(container.getChecksums(), Error, "No checksums available");
 });

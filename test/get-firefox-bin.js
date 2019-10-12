@@ -17,7 +17,7 @@ test.before(() => {
 const testGetFirefox = async (t, platform) => {
     const getFirefoxBinary = path.resolve('./bin/get-firefox');
     const tmpDir = await tmp.dir({ unsafeCleanup: true });
-    const { stderr } = await exec(`${getFirefoxBinary} -p ${platform}`, {
+    const { stderr } = await exec(`${getFirefoxBinary} -p ${platform} -b ${PLATFORMS[platform].defaultBranch}`, {
         shell: true,
         cwd: tmpDir.path
     });

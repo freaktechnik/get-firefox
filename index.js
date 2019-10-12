@@ -1,8 +1,8 @@
 /**
  * @license MPL-2.0
- * @todo win zips vs. installers
- * @todo verify checksum file signature...
- * @todo fennec nightly via mdu
+ * @todo Win zips vs installers.
+ * @todo Verify checksum file signature...
+ * @todo Fennec nightly via mdu.
  * @module get-firefox
  */
 
@@ -162,7 +162,7 @@ exports.getContainer = function(branch, system, arch) {
  * @param {module:get-firefox~Container} container - File downloading container..
  * @async
  * @throws Whenever something goes wrong. No guaranteed type.
- * @returns {Object} Resolves as soon as the file is written.
+ * @returns {object} Resolves as soon as the file is written.
  */
 exports.downloadFirefox = function(container) {
     return container.getFileURL().then((url) => fetch(url))
@@ -195,7 +195,7 @@ exports.check = function(buffer, targetName, sum) {
  * @param {Buffer} file - File to extract.
  * @param {string} [targetDir="."] - Directory to extract into. Defaults to the CWD.
  * @async
- * @throws When decompression fails
+ * @throws When decompression fails.
  * @returns {?} As soon as decompression is done.
  */
 exports.extract = function(file, targetDir) {

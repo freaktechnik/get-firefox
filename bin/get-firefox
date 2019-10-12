@@ -1,4 +1,6 @@
 #!/usr/bin/env node
+//TODO [eslint@>=6.6.0] remove disable when eslint#11899 is resolved
+/* eslint-disable require-atomic-updates */
 "use strict";
 
 const index = require('..'),
@@ -183,3 +185,4 @@ else {
         renderer: cli.flags.verbose ? 'verbose' : 'default'
     }).run();
 }
+/* eslint-enable require-atomic-updates */

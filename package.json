@@ -55,7 +55,7 @@
     "@freaktechnik/eslint-config-node": "^7.0.0",
     "@freaktechnik/eslint-config-test": "^7.0.0",
     "ajv": "^6.10.2",
-    "ava": "^2.4.0",
+    "ava": "^3.1.0",
     "codecov": "^3.6.1",
     "eclint": "^2.8.1",
     "eslint": "^6.5.1",

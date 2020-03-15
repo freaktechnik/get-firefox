@@ -115,7 +115,7 @@ else {
         {
             title: "Search latest Firefox",
             task: async (ctx) => {
-                ctx.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.arch);
+                ctx.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
                 const promises = [
                         ctx.container.getFileName(),
                         ctx.container.getFileURL()

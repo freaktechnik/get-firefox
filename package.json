@@ -36,7 +36,7 @@
     "node-fetch": "^2.6.0",
     "sha": "^3.0.0",
     "stream-to-promise": "^2.2.0",
-    "taskcluster-client": "^27.0.0"
+    "taskcluster-client": "^27.2.0"
   },
   "bin": {
     "get-firefox": "./bin/get-firefox"
@@ -52,14 +52,19 @@
     "node": ">=8.6.0"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^7.0.0",
-    "@freaktechnik/eslint-config-test": "^7.0.0",
-    "ajv": "^6.10.2",
-    "ava": "^2.4.0",
+    "@ava/babel": "^1.0.1",
+    "@freaktechnik/eslint-config-node": "^7.1.0",
+    "@freaktechnik/eslint-config-test": "^7.1.0",
+    "ajv": "^6.12.0",
+    "ava": "^3.5.0",
     "codecov": "^3.6.1",
     "eclint": "^2.8.1",
-    "eslint": "^6.5.1",
+    "eslint": "^6.8.0",
     "nyc": "^15.0.0",
     "tmp-promise": "^2.0.2"
+  },
+  "ava": {
+    "babel": true,
+    "timeout": "1m"
   }
 }

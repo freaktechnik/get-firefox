@@ -27,7 +27,7 @@
   "license": "MPL-2.0",
   "dependencies": {
     "chalk": "^3.0.0",
-    "decompress": "^4.2.0",
+    "decompress": "^4.2.1",
     "into-stream": "^5.1.1",
     "is-ci": "^2.0.0",
     "listr": "^0.14.3",

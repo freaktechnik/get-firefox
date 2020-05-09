@@ -33,13 +33,13 @@
     "into-stream": "^5.1.1",
     "is-ci": "^2.0.0",
     "listr": "^0.14.3",
-    "meow": "^6.1.0",
+    "meow": "^6.1.1",
     "moz-download-url": "^2.0.0",
     "node-fetch": "^2.6.0",
     "sha": "^3.0.0",
+    "snyk": "^1.319.2",
     "stream-to-promise": "^2.2.0",
-    "taskcluster-client": "^28.2.3",
-    "snyk": "^1.316.2"
+    "taskcluster-client": "^29.4.1"
   },
   "bin": {
     "get-firefox": "./bin/get-firefox"
@@ -56,15 +56,15 @@
   },
   "devDependencies": {
     "@ava/babel": "^1.0.1",
-    "@freaktechnik/eslint-config-node": "^7.1.0",
-    "@freaktechnik/eslint-config-test": "^7.1.0",
+    "@freaktechnik/eslint-config-node": "^7.2.0",
+    "@freaktechnik/eslint-config-test": "^7.2.0",
     "ajv": "^6.12.2",
-    "ava": "^3.7.1",
+    "ava": "^3.8.2",
     "codecov": "^3.6.1",
     "eclint": "^2.8.1",
     "eslint": "^6.8.0",
     "nyc": "^15.0.1",
-    "tmp-promise": "^2.0.2"
+    "tmp-promise": "^2.1.1"
   },
   "ava": {
     "babel": true,

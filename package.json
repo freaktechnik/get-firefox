@@ -37,7 +37,7 @@
     "moz-download-url": "^2.0.0",
     "node-fetch": "^2.6.0",
     "sha": "^3.0.0",
-    "snyk": "^1.319.2",
+    "snyk": "^1.321.0",
     "stream-to-promise": "^2.2.0",
     "taskcluster-client": "^29.4.1"
   },

@@ -39,7 +39,7 @@
     "sha": "^3.0.0",
     "snyk": "^1.319.2",
     "stream-to-promise": "^2.2.0",
-    "taskcluster-client": "^29.4.1"
+    "taskcluster-client": "^29.6.0"
   },
   "bin": {
     "get-firefox": "./bin/get-firefox"

@@ -60,7 +60,7 @@
     "@freaktechnik/eslint-config-test": "^7.2.0",
     "ajv": "^6.12.2",
     "ava": "^3.8.2",
-    "codecov": "^3.6.1",
+    "codecov": "^3.7.0",
     "eclint": "^2.8.1",
     "eslint": "^6.8.0",
     "nyc": "^15.0.1",

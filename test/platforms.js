@@ -21,21 +21,21 @@ const PROPERTIES = {
     ]
 };
 
-const EXPECTED_BRANCHES = [
+const EXPECTED_BRANCHES = new Set([
     "nightly",
     "devedition",
     "beta",
     "release",
     "esr",
     "unbranded-release"
-];
+]);
 
-const EXPECTED_ARCHES = [
+const EXPECTED_ARCHES = new Set([
     "x86_64",
     "x86",
     "arm-v15",
     "multi"
-];
+]);
 
 const platformStructure = (t, platform) => {
     t.true("defaultBranch" in platform);
@@ -58,17 +58,17 @@ const platformStructure = (t, platform) => {
 
         t.true(branch.type in PROPERTIES);
         t.true(branch.defaultArch in branch.arches);
-        t.true(EXPECTED_BRANCHES.includes(b));
+        t.true(EXPECTED_BRANCHES.has(b));
 
         const archProperties = PROPERTIES[branch.type];
 
         Object.keys(branch.arches).forEach((a) => {
             const arch = branch.arches[a];
-            t.true(EXPECTED_ARCHES.includes(a));
+            t.true(EXPECTED_ARCHES.has(a));
 
-            for(const prop of archProperties) {
-                t.true(prop in arch);
-                t.is(typeof arch[prop], "string");
+            for(const property of archProperties) {
+                t.true(property in arch);
+                t.is(typeof arch[property], "string");
             }
 
             if(branch.type == "mdu") {

@@ -193,12 +193,12 @@ exports.check = function(buffer, targetName, sum) {
  * Extract a Firefox archive.
  *
  * @param {Buffer} file - File to extract.
- * @param {string} [targetDir="."] - Directory to extract into. Defaults to the CWD.
+ * @param {string} [targetDirectory="."] - Directory to extract into. Defaults to the CWD.
  * @async
  * @throws When decompression fails.
  * @returns {?} As soon as decompression is done.
  */
-exports.extract = function(file, targetDir) {
-    targetDir = targetDir || ".";
-    return decompress(file, targetDir);
+exports.extract = function(file, targetDirectory) {
+    targetDirectory = targetDirectory || ".";
+    return decompress(file, targetDirectory);
 };

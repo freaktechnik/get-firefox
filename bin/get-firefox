@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-//TODO [eslint@>=6.6.0] remove disable when eslint#11899 is resolved
 /* eslint-disable require-atomic-updates */
 "use strict";
 
@@ -114,71 +113,71 @@ else {
     new Listr([
         {
             title: "Search latest Firefox",
-            task: async (ctx) => {
-                ctx.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
+            task: async (context) => {
+                context.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
                 const promises = [
-                        ctx.container.getFileName(),
-                        ctx.container.getFileURL()
+                        context.container.getFileName(),
+                        context.container.getFileURL()
                     ],
                     [
                         fileName,
                         fileURL
                     ] = await Promise.all(promises);
 
-                ctx.url = fileURL;
-                ctx.name = fileName;
+                context.url = fileURL;
+                context.name = fileName;
             }
         },
         {
             title: "Get checksum",
             enabled: () => cli.flags.check,
-            task: async (ctx, task) => {
+            task: async (context, task) => {
                 try {
-                    ctx.checksums = await ctx.container.getChecksums();
+                    context.checksums = await context.container.getChecksums();
                 }
-                catch(e) {
-                    if(e.message === "No checksums available") {
-                        task.output = e.message;
-                        ctx.noChecksums = true;
+                catch(error) {
+                    if(error.message === "No checksums available") {
+                        task.output = error.message;
+                        context.noChecksums = true;
                     }
                     else {
-                        throw e;
+                        throw error;
                     }
                 }
             }
         },
         {
             title: "Download",
-            task: async (ctx, task) => {
-                task.output = `Downloading from ${chalk.blue(ctx.url)}`;
-                ctx.stream = await index.downloadFirefox(ctx.container);
-                ctx.buffer = await streamToPromise(ctx.stream);
+            task: async (context, task) => {
+                task.output = `Downloading from ${chalk.blue(context.url)}`;
+                context.stream = await index.downloadFirefox(context.container);
+                context.buffer = await streamToPromise(context.stream);
             }
         },
         {
             title: "Verify checksum",
             enabled: () => cli.flags.check,
-            skip: (ctx) => ctx.noChecksums || !ctx.checksums,
-            task: async (ctx) => {
-                ctx.stream = index.check(ctx.buffer, ctx.name, ctx.checksums);
-                ctx.buffer = await streamToPromise(ctx.stream);
+            skip: (context) => context.noChecksums || !context.checksums,
+            task: async (context) => {
+                context.stream = index.check(context.buffer, context.name, context.checksums);
+                context.buffer = await streamToPromise(context.stream);
             }
         },
         {
             title: "Extract",
             enabled: () => cli.flags.extract,
-            task: (ctx, task) => {
+            task: (context, task) => {
                 task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
-                return index.extract(ctx.buffer, cli.flags.target);
+                return index.extract(context.buffer, cli.flags.target);
             }
         },
         {
             title: "Write file to disk",
             enabled: () => !cli.flags.extract,
-            task: (ctx, task) => {
-                const saveAs = cli.flags.target || ctx.name;
+            task: (context, task) => {
+                const saveAs = cli.flags.target || context.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return index.writeFile(saveAs, ctx.buffer);
+                return index.writeFile(saveAs, context.buffer);
             }
         }
     ], {

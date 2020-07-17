@@ -9,9 +9,7 @@
     "lint": "npm run lint:js && npm run lint:ec",
     "test": "nyc ava",
     "coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
-    "start": "node bin/get-firefox",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
+    "start": "node bin/get-firefox"
   },
   "keywords": [
     "fennec",
@@ -37,7 +35,6 @@
     "moz-download-url": "^2.0.0",
     "node-fetch": "^2.6.0",
     "sha": "^3.0.0",
-    "snyk": "^1.319.2",
     "stream-to-promise": "^2.2.0",
     "taskcluster-client": "^29.4.1"
   },
@@ -69,6 +66,5 @@
   "ava": {
     "babel": true,
     "timeout": "1m"
-  },
-  "snyk": true
+  }
 }

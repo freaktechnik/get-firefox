@@ -31,7 +31,7 @@
     "into-stream": "^6.0.0",
     "is-ci": "^2.0.0",
     "listr": "^0.14.3",
-    "meow": "^7.1.1",
+    "meow": "^8.0.0",
     "moz-download-url": "^2.0.0",
     "node-fetch": "^2.6.1",
     "sha": "^3.0.0",

@@ -30,7 +30,8 @@
                                         "multi",
                                         "x86",
                                         "x86_64",
-                                        "arm-v15"
+                                        "arm",
+                                        "arm64"
                                     ]
                                 },
                                 "type": {
@@ -70,7 +71,7 @@
                                                 "path": {
                                                     "type": "string",
                                                     "minLength": 3,
-                                                    "pattern": "^[a-z0-9/-]+$"
+                                                    "pattern": "^[a-z0-9/-_]+$"
                                                 }
                                             },
                                             "minProperties": 2,

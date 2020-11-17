@@ -33,8 +33,9 @@ const EXPECTED_BRANCHES = new Set([
 const EXPECTED_ARCHES = new Set([
     "x86_64",
     "x86",
-    "arm-v15",
-    "multi"
+    "arm",
+    "multi",
+    "arm64"
 ]);
 
 const platformStructure = (t, platform) => {

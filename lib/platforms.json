@@ -1,36 +1,82 @@
 {
     "android": {
-        "defaultBranch": "release",
+        "defaultBranch": "nightly",
         "branches": {
-            "beta": {
-                "defaultArch": "arm-v15",
-                "type": "mdu",
+            "nightly": {
+                "defaultArch": "arm",
+                "type": "taskcluster",
                 "arches": {
-                    "arm-v15": {
-                        "platform": "ANDROID",
-                        "product": "FIREFOX_FOR_ANDROID",
-                        "version": "LATEST_BETA"
+                    "arm": {
+                        "namespace": "mobile.v2.fenix.nightly.latest.armeabi-v7a",
+                        "path": "public/build/armeabi-v7a",
+                        "fileEnding": ".apk"
+                    },
+                    "arm64": {
+                        "namespace": "mobile.v2.fenix.nightly.latest.arm64-v8a",
+                        "path": "public/build/arm64-v8a",
+                        "fileEnding": ".apk"
+                    },
+                    "x86_64": {
+                        "namespace": "mobile.v2.fenix.nightly.latest.x86_64",
+                        "path": "public/build/x86_64",
+                        "fileEnding": ".apk"
                     },
                     "x86": {
-                        "platform": "ANDROID_X86",
-                        "product": "FIREFOX_FOR_ANDROID",
-                        "version": "LATEST_BETA"
+                        "namespace": "mobile.v2.fenix.nightly.latest.x86",
+                        "path": "public/build/x86/",
+                        "fileEnding": ".apk"
+                    }
+                }
+            },
+            "beta": {
+                "defaultArch": "arm",
+                "type": "taskcluster",
+                "arches": {
+                    "arm": {
+                        "namespace": "mobile.v2.fenix.beta.latest.armeabi-v7a",
+                        "path": "public/build/armeabi-v7a",
+                        "fileEnding": ".apk"
+                    },
+                    "arm64": {
+                        "namespace": "mobile.v2.fenix.beta.latest.arm64-v8a",
+                        "path": "public/build/arm64-v8a",
+                        "fileEnding": ".apk"
+                    },
+                    "x86_64": {
+                        "namespace": "mobile.v2.fenix.beta.latest.x86_64",
+                        "path": "public/build/x86_64",
+                        "fileEnding": ".apk"
+                    },
+                    "x86": {
+                        "namespace": "mobile.v2.fenix.beta.latest.x86",
+                        "path": "public/build/x86/",
+                        "fileEnding": ".apk"
                     }
                 }
             },
             "release": {
-                "defaultArch": "arm-v15",
-                "type": "mdu",
+                "defaultArch": "arm",
+                "type": "taskcluster",
                 "arches": {
-                    "arm-v15": {
-                        "platform": "ANDROID",
-                        "product": "FIREFOX_FOR_ANDROID",
-                        "version": "LATEST"
+                    "arm": {
+                        "namespace": "mobile.v2.fenix.release.latest.armeabi-v7a",
+                        "path": "public/build/armeabi-v7a",
+                        "fileEnding": ".apk"
+                    },
+                    "arm64": {
+                        "namespace": "mobile.v2.fenix.release.latest.arm64-v8a",
+                        "path": "public/build/arm64-v8a",
+                        "fileEnding": ".apk"
+                    },
+                    "x86_64": {
+                        "namespace": "mobile.v2.fenix.release.latest.x86_64",
+                        "path": "public/build/x86_64",
+                        "fileEnding": ".apk"
                     },
                     "x86": {
-                        "platform": "ANDROID_X86",
-                        "product": "FIREFOX_FOR_ANDROID",
-                        "version": "LATEST"
+                        "namespace": "mobile.v2.fenix.release.latest.x86",
+                        "path": "public/build/x86/",
+                        "fileEnding": ".apk"
                     }
                 }
             }
@@ -222,6 +268,11 @@
                         "platform": "WIN32",
                         "product": "FIREFOX",
                         "version": "LATEST_NIGHTLY_STUB"
+                    },
+                    "arm64": {
+                        "platform": "WIN64_AARCH64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_NIGHTLY"
                     }
                 }
             },
@@ -243,6 +294,11 @@
                         "platform": "WIN32",
                         "product": "FIREFOX",
                         "version": "LATEST_DEVEDITION_STUB"
+                    },
+                    "arm64": {
+                        "platform": "WIN64_AARCH64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_DEVEDITION"
                     }
                 }
             },
@@ -264,6 +320,11 @@
                         "platform": "WIN32",
                         "product": "FIREFOX",
                         "version": "LATEST_BETA_STUB"
+                    },
+                    "arm64": {
+                        "platform": "WIN64_AARCH64",
+                        "product": "FIREFOX",
+                        "version": "LATEST_BETA"
                     }
                 }
             },
@@ -285,6 +346,11 @@
                         "platform": "WIN32",
                         "product": "FIREFOX",
                         "version": "LATEST_STUB"
+                    },
+                    "arm64": {
+                        "platform": "WIN64_AARCH64",
+                        "product": "FIREFOX",
+                        "version": "LATEST"
                     }
                 }
             },
@@ -299,6 +365,11 @@
                     },
                     "x86": {
                         "platform": "WIN32",
+                        "product": "FIREFOX",
+                        "version": "LATEST_ESR"
+                    },
+                    "arm64": {
+                        "platform": "WIN64_AARCH64",
                         "product": "FIREFOX",
                         "version": "LATEST_ESR"
                     }

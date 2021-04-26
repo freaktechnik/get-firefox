@@ -25,7 +25,7 @@
   "author": "freaktechnik (http://humanoids.be)",
   "license": "MPL-2.0",
   "dependencies": {
-    "chalk": "^4.1.0",
+    "chalk": "^4.1.1",
     "decompress": "^4.2.1",
     "into-stream": "^6.0.0",
     "is-ci": "^3.0.0",

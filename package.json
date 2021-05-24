@@ -54,7 +54,7 @@
     "@ava/babel": "^1.0.1",
     "@freaktechnik/eslint-config-node": "^8.0.2",
     "@freaktechnik/eslint-config-test": "^8.0.2",
-    "ajv": "^8.4.0",
+    "ajv": "^8.5.0",
     "ava": "^3.13.0",
     "eclint": "^2.8.1",
     "eslint": "^7.26.0",

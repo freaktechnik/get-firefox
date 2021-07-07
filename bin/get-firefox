@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 /* eslint-disable require-atomic-updates */
 "use strict";
-
-const index = require('..'),
-    meow = require("meow"),
-    streamToPromise = require("stream-to-promise"),
-    chalk = require("chalk"),
-    Listr = require("listr"),
-    isCI = require("is-ci"),
-    cli = meow({
-        help: `
+const _meow = import('meow');
+_meow.then((module)=> {
+     const meow = module.default;
+    const index = require('..'),
+        streamToPromise = require("stream-to-promise"),
+        chalk = require("chalk"),
+        Listr = require("listr"),
+        isCI = require("is-ci"),
+        cli = meow({
+            help: `
     Usage
         $ get-firefox
 
@@ -28,160 +29,162 @@ const index = require('..'),
     Examples
         $ get-firefox --platform android --target fenix.apk --architecture arm
 `,
-        flags: {
-            architecture: {
-                type: "string",
-                alias: "a"
+            flags: {
+                architecture: {
+                    type: "string",
+                    alias: "a"
+                },
+                branch: {
+                    type: "string",
+                    alias: "b",
+                    default: "nightly"
+                },
+                check: {
+                    type: "boolean",
+                    alias: "c"
+                },
+                extract: {
+                    type: "boolean",
+                    alias: "e"
+                },
+                help: {
+                    type: "boolean",
+                    alias: "h"
+                },
+                list: {
+                    type: "boolean",
+                    alias: "l"
+                },
+                platform: {
+                    type: "string",
+                    alias: "p",
+                    default: index.getDefaultSystem()
+                },
+                target: {
+                    type: "string",
+                    alias: "t"
+                },
+                version: {
+                    type: "boolean",
+                    alias: "v"
+                },
+                verbose: {
+                    type: "boolean",
+                    default: isCI
+                }
             },
-            branch: {
-                type: "string",
-                alias: "b",
-                default: "nightly"
-            },
-            check: {
-                type: "boolean",
-                alias: "c"
-            },
-            extract: {
-                type: "boolean",
-                alias: "e"
-            },
-            help: {
-                type: "boolean",
-                alias: "h"
-            },
-            list: {
-                type: "boolean",
-                alias: "l"
-            },
-            platform: {
-                type: "string",
-                alias: "p",
-                default: index.getDefaultSystem()
-            },
-            target: {
-                type: "string",
-                alias: "t"
-            },
-            version: {
-                type: "boolean",
-                alias: "v"
-            },
-            verbose: {
-                type: "boolean",
-                default: isCI
-            }
-        }
-    });
+            importMeta: {url: `file://${__filename}`}
+        });
 
-if(cli.flags.list) {
-    const platforms = require("../lib/platforms.json"),
-        defaultPlatform = index.getDefaultSystem();
-    let branch,
-        plat,
-        title,
-        multipleArches = false;
-    for(const p in platforms) {
-        plat = platforms[p];
+    if(cli.flags.list) {
+        const platforms = require("../lib/platforms.json"),
+            defaultPlatform = index.getDefaultSystem();
+        let branch,
+            plat,
+            title,
+            multipleArches = false;
+        for(const p in platforms) {
+            plat = platforms[p];
 
-        title = p;
-        if(p == defaultPlatform) {
-            title += chalk.gray(" (default)");
-        }
-        process.stdout.write(`${chalk.underline.bold(title)}\n`);
-        for(const b in plat.branches) {
-            branch = plat.branches[b];
-            title = chalk.bold(b);
-            if(b == plat.defaultBranch) {
-                title = chalk.yellow(title);
+            title = p;
+            if(p == defaultPlatform) {
                 title += chalk.gray(" (default)");
             }
-            process.stdout.write(` ${title}\n`);
-            multipleArches = Object.keys(branch.arches).length;
-            for(const a in branch.arches) {
-                title = a;
-                if(a == branch.defaultArch && multipleArches) {
+            process.stdout.write(`${chalk.underline.bold(title)}\n`);
+            for(const b in plat.branches) {
+                branch = plat.branches[b];
+                title = chalk.bold(b);
+                if(b == plat.defaultBranch) {
+                    title = chalk.yellow(title);
                     title += chalk.gray(" (default)");
                 }
-                process.stdout.write(`   - ${title}\n`);
+                process.stdout.write(` ${title}\n`);
+                multipleArches = Object.keys(branch.arches).length;
+                for(const a in branch.arches) {
+                    title = a;
+                    if(a == branch.defaultArch && multipleArches) {
+                        title += chalk.gray(" (default)");
+                    }
+                    process.stdout.write(`   - ${title}\n`);
+                }
             }
+            process.stdout.write("\n");
         }
-        process.stdout.write("\n");
     }
-}
-else {
-    new Listr([
-        {
-            title: "Search latest Firefox",
-            task: async (context) => {
-                context.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
-                const promises = [
-                        context.container.getFileName(),
-                        context.container.getFileURL()
-                    ],
-                    [
-                        fileName,
-                        fileURL
-                    ] = await Promise.all(promises);
+    else {
+        new Listr([
+            {
+                title: "Search latest Firefox",
+                task: async (context) => {
+                    context.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
+                    const promises = [
+                            context.container.getFileName(),
+                            context.container.getFileURL()
+                        ],
+                        [
+                            fileName,
+                            fileURL
+                        ] = await Promise.all(promises);
 
-                context.url = fileURL;
-                context.name = fileName;
-            }
-        },
-        {
-            title: "Get checksum",
-            enabled: () => cli.flags.check,
-            task: async (context, task) => {
-                try {
-                    context.checksums = await context.container.getChecksums();
+                    context.url = fileURL;
+                    context.name = fileName;
                 }
-                catch(error) {
-                    if(error.message === "No checksums available") {
-                        task.output = error.message;
-                        context.noChecksums = true;
+            },
+            {
+                title: "Get checksum",
+                enabled: () => cli.flags.check,
+                task: async (context, task) => {
+                    try {
+                        context.checksums = await context.container.getChecksums();
                     }
-                    else {
-                        throw error;
+                    catch(error) {
+                        if(error.message === "No checksums available") {
+                            task.output = error.message;
+                            context.noChecksums = true;
+                        }
+                        else {
+                            throw error;
+                        }
                     }
                 }
+            },
+            {
+                title: "Download",
+                task: async (context, task) => {
+                    task.output = `Downloading from ${chalk.blue(context.url)}`;
+                    context.stream = await index.downloadFirefox(context.container);
+                    context.buffer = await streamToPromise(context.stream);
+                }
+            },
+            {
+                title: "Verify checksum",
+                enabled: () => cli.flags.check,
+                skip: (context) => context.noChecksums || !context.checksums,
+                task: async (context) => {
+                    context.stream = index.check(context.buffer, context.name, context.checksums);
+                    context.buffer = await streamToPromise(context.stream);
+                }
+            },
+            {
+                title: "Extract",
+                enabled: () => cli.flags.extract,
+                task: (context, task) => {
+                    task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
+                    return index.extract(context.buffer, cli.flags.target);
+                }
+            },
+            {
+                title: "Write file to disk",
+                enabled: () => !cli.flags.extract,
+                task: (context, task) => {
+                    const saveAs = cli.flags.target || context.name;
+                    task.output = `Saving as ${chalk.blue(saveAs)}`;
+                    return index.writeFile(saveAs, context.buffer);
+                }
             }
-        },
-        {
-            title: "Download",
-            task: async (context, task) => {
-                task.output = `Downloading from ${chalk.blue(context.url)}`;
-                context.stream = await index.downloadFirefox(context.container);
-                context.buffer = await streamToPromise(context.stream);
-            }
-        },
-        {
-            title: "Verify checksum",
-            enabled: () => cli.flags.check,
-            skip: (context) => context.noChecksums || !context.checksums,
-            task: async (context) => {
-                context.stream = index.check(context.buffer, context.name, context.checksums);
-                context.buffer = await streamToPromise(context.stream);
-            }
-        },
-        {
-            title: "Extract",
-            enabled: () => cli.flags.extract,
-            task: (context, task) => {
-                task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
-                return index.extract(context.buffer, cli.flags.target);
-            }
-        },
-        {
-            title: "Write file to disk",
-            enabled: () => !cli.flags.extract,
-            task: (context, task) => {
-                const saveAs = cli.flags.target || context.name;
-                task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return index.writeFile(saveAs, context.buffer);
-            }
-        }
-    ], {
-        renderer: cli.flags.verbose ? 'verbose' : 'default'
-    }).run();
-}
+        ], {
+            renderer: cli.flags.verbose ? 'verbose' : 'default'
+        }).run();
+    }
+}).catch((error)=> console.log(error))
 /* eslint-enable require-atomic-updates */

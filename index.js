@@ -5,19 +5,15 @@
  * @todo Fennec nightly via mdu.
  * @module get-firefox
  */
+import fs from "node:fs/promises";
+import sha from "sha";
+import decompress from "decompress";
+import fetch from "node-fetch";
+import intoStream from "into-stream";
 
-"use strict";
-
-const fs = require("fs"),
-    sha = require("sha"),
-    decompress = require("decompress"),
-    fetch = require("node-fetch"),
-    intoStream = require("into-stream"),
-    util = require("util"),
-
-    MDUContainer = require("./lib/mdu-container"),
-    ClassicContainer = require("./lib/classic-container"),
-    TaskclusterContainer = require("./lib/taskcluster-container"),
+import MDUContainer from "./lib/mdu-container.js";
+import ClassicContainer from "./lib/classic-container.js";
+import TaskclusterContainer from "./lib/taskcluster-container.js";
 
     /**
      * Container for all the logic to determine download URL, file name and
@@ -38,18 +34,16 @@ const fs = require("fs"),
      * @async
      */
 
-    PLATFORMS = require("./lib/platforms.json"),
+const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", import.meta.url))),
     CONTAINERS = [
         ClassicContainer,
         MDUContainer,
         TaskclusterContainer
     ],
 
-    promisifiedWrite = util.promisify(fs.writeFile),
-
     normalizeSystem = (system) => {
         if(!system || !(system in PLATFORMS)) {
-            const defaultPlatform = exports.getDefaultSystem();
+            const defaultPlatform = getDefaultSystem();
             if(system) {
                 console.warn(`Unknown platform '${system}', defaulting to ${defaultPlatform}`);
             }
@@ -99,106 +93,96 @@ const fs = require("fs"),
     },
     calculateChecksum = (stream, expected) => stream.pipe(sha.stream(expected, {
         algorithm: "sha512"
-    }));
+    })),
 
-/**
- * Save a stream to disk.
- *
- * @param {string} target - File name in the local system.
- * @param {Buffer} buffer - Buffer to save to disk.
- * @async
- * @throws If writing the buffer fails.
- * @returns {undefined}
- */
-exports.writeFile = (target, buffer) => promisifiedWrite(target, buffer);
-
-/**
- * Get the best-matching system for the current operating system, falling back
- * to Linux.
- *
- * @returns {string} Best matching operating system name.
- */
-exports.getDefaultSystem = function() {
-    switch(process.platform) {
-    case "darwin":
-        return "mac";
-    case "win32":
-        return "win";
-    case "android":
-        return "android";
-    default:
-        return "linux";
-    }
-};
-
-/**
- * Get the container to pass to the other methods based on system and arch.
- *
- * @param {string} branch - Firefox release branch.
- * @param {string} system - System name.
- * @param {string} [arch] - Architecture name.
- * @returns {module:get-firefox~Container} The container to describe the Firefox
- *                                          to download.
- */
-exports.getContainer = function(branch, system, arch) {
-    system = normalizeSystem(system);
-    branch = normalizeBranch(branch, system);
-    const spec = getDownloadInfo(branch, system),
-        { type } = PLATFORMS[system].branches[branch],
-        Constructor = CONTAINERS.find((c) => c.type == type);
-
-    if(!(arch in spec.arches)) {
-        if(arch) {
-            console.warn(`There is no architecture ${arch} for ${system}, defaulting to ${spec.defaultArch}`);
+    /**
+     * Get the best-matching system for the current operating system, falling back
+     * to Linux.
+     *
+     * @returns {string} Best matching operating system name.
+     */
+    getDefaultSystem = () => {
+        switch(process.platform) {
+        case "darwin":
+            return "mac";
+        case "win32":
+            return "win";
+        case "android":
+            return "android";
+        default:
+            return "linux";
         }
-        arch = spec.defaultArch;
-    }
-    return new Constructor(spec.arches[arch]);
-};
+    },
 
-/**
- * Download Firefox to a target location.
- *
- * @param {module:get-firefox~Container} container - File downloading container..
- * @async
- * @throws Whenever something goes wrong. No guaranteed type.
- * @returns {object} Resolves as soon as the file is written.
- */
-exports.downloadFirefox = function(container) {
-    return container.getFileURL().then((url) => fetch(url))
-        .then((response) => {
-            if(response.ok) {
-                return response.body;
+    /**
+     * Get the container to pass to the other methods based on system and arch.
+     *
+     * @param {string} branch - Firefox release branch.
+     * @param {string} system - System name.
+     * @param {string} [arch] - Architecture name.
+     * @returns {module:get-firefox~Container} The container to describe the Firefox
+     *                                          to download.
+     */
+    getContainer = (branch, system, arch) => {
+        system = normalizeSystem(system);
+        branch = normalizeBranch(branch, system);
+        const spec = getDownloadInfo(branch, system),
+            { type } = PLATFORMS[system].branches[branch],
+            Constructor = CONTAINERS.find((c) => c.type == type);
+
+        if(!(arch in spec.arches)) {
+            if(arch) {
+                console.warn(`There is no architecture ${arch} for ${system}, defaulting to ${spec.defaultArch}`);
             }
+            arch = spec.defaultArch;
+        }
+        return new Constructor(spec.arches[arch]);
+    },
 
-            throw new Error(`Could not download Firefox: ${response.statusText}`);
-        });
-};
+    /**
+     * Download Firefox to a target location.
+     *
+     * @param {module:get-firefox~Container} container - File downloading container..
+     * @async
+     * @throws Whenever something goes wrong. No guaranteed type.
+     * @returns {object} Resolves as soon as the file is written.
+     */
+    downloadFirefox = async (container) => {
+        const url = await container.getFileURL(),
+            response = await fetch(url);
+        if(response.ok) {
+            return response.body;
+        }
 
-/**
- * Check the checksum of a local file.
- *
- * @param {Buffer} buffer - Buffer of the downloaded file.
- * @param {string} targetName - Name of the remote file.
- * @param {string} sum - Checksum the file should match.
- * @async
- * @returns {Stream} A Stream that errors if the hash does not match.
- */
-exports.check = function(buffer, targetName, sum) {
-    const fileStream = intoStream(buffer);
-    return calculateChecksum(fileStream, getFileChecksum(targetName, sum));
-};
+        throw new Error(`Could not download Firefox: ${response.statusText}`);
+    },
 
-/**
- * Extract a Firefox archive.
- *
- * @param {Buffer} file - File to extract.
- * @param {string} [targetDirectory="."] - Directory to extract into. Defaults to the CWD.
- * @async
- * @throws When decompression fails.
- * @returns {?} As soon as decompression is done.
- */
-exports.extract = function(file, targetDirectory) {
-    targetDirectory = targetDirectory || ".";
-    return decompress(file, targetDirectory);
-};
+    /**
+     * Check the checksum of a local file.
+     *
+     * @param {Buffer} buffer - Buffer of the downloaded file.
+     * @param {string} targetName - Name of the remote file.
+     * @param {string} sum - Checksum the file should match.
+     * @async
+     * @returns {Stream} A Stream that errors if the hash does not match.
+     */
+    check = (buffer, targetName, sum) => {
+        const fileStream = intoStream(buffer);
+        return calculateChecksum(fileStream, getFileChecksum(targetName, sum));
+    },
+
+    /**
+     * Extract a Firefox archive.
+     *
+     * @param {Buffer} file - File to extract.
+     * @param {string} [targetDirectory="."] - Directory to extract into. Defaults to the CWD.
+     * @async
+     * @throws When decompression fails.
+     * @returns {any} As soon as decompression is done.
+     */
+    extract = (file, targetDirectory) => {
+        targetDirectory = targetDirectory || ".";
+        return decompress(file, targetDirectory);
+    };
+
+export { getDefaultSystem, getContainer, downloadFirefox, check, extract, PLATFORMS }

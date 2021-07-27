@@ -1,8 +1,9 @@
 import test from 'ava';
-import platforms from '../lib/platforms.json';
+import fs from 'node:fs/promises';
 import mdu from 'moz-download-url';
 import Ajv from 'ajv';
-import schema from '../schemas/platforms.json';
+const platforms = JSON.parse(await fs.readFile(new URL('../lib/platforms.json', import.meta.url)));
+const schema = JSON.parse(await fs.readFile(new URL('../schemas/platforms.json', import.meta.url)));
 
 // I don't like that this is hardcoded, but this is the best I could come up with for now.
 const PROPERTIES = {

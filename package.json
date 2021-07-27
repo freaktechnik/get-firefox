@@ -1,14 +1,15 @@
 {
   "name": "get-firefox",
-  "version": "5.0.0",
+  "version": "6.0.0",
   "description": "Download the latest Firefox from the command line",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint:js": "eslint index.js lib/ bin/get-firefox test/ --ext js,json",
+    "lint:js": "eslint index.js lib/ bin/ test/ --ext js,json",
     "lint:ec": "eclint check $(git ls-files)",
     "lint": "npm run lint:js && npm run lint:ec",
     "test": "nyc ava",
-    "start": "node bin/get-firefox"
+    "start": "node bin/get-firefox.js"
   },
   "keywords": [
     "fennec",
@@ -27,10 +28,10 @@
   "dependencies": {
     "chalk": "^4.1.1",
     "decompress": "^4.2.1",
-    "into-stream": "^6.0.0",
+    "into-stream": "^7.0.0",
     "is-ci": "^3.0.0",
     "listr": "^0.14.3",
-    "meow": "^9.0.0",
+    "meow": "^10.1.0",
     "moz-download-url": "^2.1.0",
     "node-fetch": "^2.6.1",
     "sha": "^3.0.0",
@@ -38,7 +39,7 @@
     "taskcluster-client": "^44.0.0"
   },
   "bin": {
-    "get-firefox": "./bin/get-firefox"
+    "get-firefox": "./bin/get-firefox.js"
   },
   "bugs": {
     "url": "https://github.com/freaktechnik/get-firefox/issues"
@@ -48,10 +49,9 @@
     "url": "https://github.com/freaktechnik/get-firefox.git"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.22.0"
   },
   "devDependencies": {
-    "@ava/babel": "^2.0.0",
     "@freaktechnik/eslint-config-node": "^8.0.2",
     "@freaktechnik/eslint-config-test": "^8.0.2",
     "ajv": "^8.6.2",
@@ -62,7 +62,6 @@
     "tmp-promise": "^3.0.2"
   },
   "ava": {
-    "babel": true,
     "timeout": "1m"
   }
 }

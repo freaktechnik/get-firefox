@@ -1,58 +1,32 @@
 name: test
 on: [push, pull_request]
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - run: npm ci --ignore-scripts --no-audit
-  lint-js:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - run: npm ci --no-audit
-      - run: npm run lint:js
+  # lint-js:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: actions/setup-node@v2
+  #       with:
+  #         cache: 'npm'
+  #     - run: npm ci --no-audit
+  #     - run: npm run lint:js
   lint-editorconfig:
-    needs: setup
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
       - run: npm ci --no-audit
       - run: npm run lint:ec
   test:
-    needs: [lint-js, lint-editorconfig]
+    needs: [lint-editorconfig]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/cache@v2
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
+        with:
+          cache: 'npm'
       - run: npm ci --no-audit
       - run: npm test
       - uses: codecov/codecov-action@v1

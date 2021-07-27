@@ -1,15 +1,20 @@
 #!/usr/bin/env node
 /* eslint-disable require-atomic-updates */
-"use strict";
-
-const index = require('..'),
-    meow = require("meow"),
-    streamToPromise = require("stream-to-promise"),
-    chalk = require("chalk"),
-    Listr = require("listr"),
-    isCI = require("is-ci"),
-    cli = meow({
-        help: `
+import fs from "node:fs/promises";
+import {
+    getDefaultSystem,
+    getContainer,
+    downloadFirefox,
+    check,
+    extract,
+    PLATFORMS
+} from '../index.js';
+import meow from "meow";
+import streamToPromise from "stream-to-promise";
+import chalk from "chalk";
+import Listr from "listr";
+import isCI from "is-ci";
+const cli = meow(`
     Usage
         $ get-firefox
 
@@ -28,62 +33,63 @@ const index = require('..'),
     Examples
         $ get-firefox --platform android --target fenix.apk --architecture arm
 `,
-        flags: {
-            architecture: {
-                type: "string",
-                alias: "a"
-            },
-            branch: {
-                type: "string",
-                alias: "b",
-                default: "nightly"
-            },
-            check: {
-                type: "boolean",
-                alias: "c"
-            },
-            extract: {
-                type: "boolean",
-                alias: "e"
-            },
-            help: {
-                type: "boolean",
-                alias: "h"
-            },
-            list: {
-                type: "boolean",
-                alias: "l"
-            },
-            platform: {
-                type: "string",
-                alias: "p",
-                default: index.getDefaultSystem()
-            },
-            target: {
-                type: "string",
-                alias: "t"
-            },
-            version: {
-                type: "boolean",
-                alias: "v"
-            },
-            verbose: {
-                type: "boolean",
-                default: isCI
-            }
+{
+    importMeta: import.meta,
+    flags: {
+        architecture: {
+            type: "string",
+            alias: "a"
+        },
+        branch: {
+            type: "string",
+            alias: "b",
+            default: "nightly"
+        },
+        check: {
+            type: "boolean",
+            alias: "c"
+        },
+        extract: {
+            type: "boolean",
+            alias: "e"
+        },
+        help: {
+            type: "boolean",
+            alias: "h"
+        },
+        list: {
+            type: "boolean",
+            alias: "l"
+        },
+        platform: {
+            type: "string",
+            alias: "p",
+            default: getDefaultSystem()
+        },
+        target: {
+            type: "string",
+            alias: "t"
+        },
+        version: {
+            type: "boolean",
+            alias: "v"
+        },
+        verbose: {
+            type: "boolean",
+            default: isCI
         }
-    });
+    }
+});
 
 if(cli.flags.list) {
-    const platforms = require("../lib/platforms.json"),
-        defaultPlatform = index.getDefaultSystem();
+    const defaultPlatform = getDefaultSystem();
     let branch,
-        plat,
         title,
         multipleArches = false;
-    for(const p in platforms) {
-        plat = platforms[p];
-
+    for(const [
+        p,
+        plat
+    ] of Object.entries(PLATFORMS)) {
         title = p;
         if(p == defaultPlatform) {
             title += chalk.gray(" (default)");
@@ -114,7 +120,7 @@ else {
         {
             title: "Search latest Firefox",
             task: async (context) => {
-                context.container = index.getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
+                context.container = getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
                 const promises = [
                         context.container.getFileName(),
                         context.container.getFileURL()
@@ -150,7 +156,7 @@ else {
             title: "Download",
             task: async (context, task) => {
                 task.output = `Downloading from ${chalk.blue(context.url)}`;
-                context.stream = await index.downloadFirefox(context.container);
+                context.stream = await downloadFirefox(context.container);
                 context.buffer = await streamToPromise(context.stream);
             }
         },
@@ -159,7 +165,7 @@ else {
             enabled: () => cli.flags.check,
             skip: (context) => context.noChecksums || !context.checksums,
             task: async (context) => {
-                context.stream = index.check(context.buffer, context.name, context.checksums);
+                context.stream = check(context.buffer, context.name, context.checksums);
                 context.buffer = await streamToPromise(context.stream);
             }
         },
@@ -168,7 +174,7 @@ else {
             enabled: () => cli.flags.extract,
             task: (context, task) => {
                 task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
-                return index.extract(context.buffer, cli.flags.target);
+                return extract(context.buffer, cli.flags.target);
             }
         },
         {
@@ -177,7 +183,7 @@ else {
             task: (context, task) => {
                 const saveAs = cli.flags.target || context.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return index.writeFile(saveAs, context.buffer);
+                return fs.writeFile(saveAs, context.buffer);
             }
         }
     ], {

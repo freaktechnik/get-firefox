@@ -4,7 +4,7 @@ const METHODS = [
     "getChecksums"
 ];
 
-module.exports = (t, Constructor, spec = {}) => {
+export default (t, Constructor, spec = {}) => {
     t.true("name" in Constructor);
     t.is(typeof Constructor.name, "string");
 

@@ -1,5 +1,5 @@
 import test from 'ava';
-import { getContainer } from '..';
+import { getContainer } from '../index.js';
 
 test('getContainer with non-default arch and branch', (t) => {
     const container = getContainer("beta", "linux", "x86");

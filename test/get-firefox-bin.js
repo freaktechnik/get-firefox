@@ -19,7 +19,7 @@ const testGetFirefox = async (t, platform) => {
         shell: true,
         cwd: temporaryDirectory.path
     });
-    t.is(stderr, '');
+    t.regex(stderr, /\^(node:\d+\) ExperimentalWarning: stream\/web is an experimental feature\. This feature could change at any time\n\(Use `node --trace-warnings \.\.\.` to show where the warning was created\)\n$/);
     const files = await fs.readdir(temporaryDirectory.path);
     t.is(files.length, 1, "One file was downloaded");
     const filePath = path.join(temporaryDirectory.path, files[0]);

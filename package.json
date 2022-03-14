@@ -36,7 +36,7 @@
     "node-fetch": "^3.2.2",
     "sha": "^3.0.0",
     "stream-to-promise": "^3.0.0",
-    "taskcluster-client": "^44.8.2"
+    "taskcluster-client": "^44.8.3"
   },
   "bin": {
     "get-firefox": "./bin/get-firefox.js"

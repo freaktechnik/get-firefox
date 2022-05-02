@@ -33,7 +33,7 @@
     "listr": "^0.14.3",
     "meow": "^10.1.2",
     "moz-download-url": "^2.1.0",
-    "node-fetch": "^3.2.3",
+    "node-fetch": "^3.2.4",
     "sha": "^3.0.0",
     "stream-to-promise": "^3.0.0",
     "taskcluster-client": "^44.12.1"

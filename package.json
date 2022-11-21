@@ -55,7 +55,7 @@
     "@freaktechnik/eslint-config-node": "^9.0.3",
     "@freaktechnik/eslint-config-test": "^9.0.1",
     "ajv": "^8.11.2",
-    "ava": "^5.0.1",
+    "ava": "^5.1.0",
     "eclint": "^2.8.1",
     "eslint": "^8.27.0",
     "eslint-plugin-optimize-regex": "^1.2.1",

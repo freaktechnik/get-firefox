@@ -48,8 +48,10 @@ const platformStructure = (t, platform) => {
 
     t.true(platform.defaultBranch in platform.branches);
 
-    Object.keys(platform.branches).forEach((b) => {
-        const branch = platform.branches[b];
+    for(const [
+        b,
+        branch
+    ] of Object.entries(platform.branches)) {
         t.true("defaultArch" in branch);
         t.true("type" in branch);
         t.true("arches" in branch);
@@ -64,8 +66,10 @@ const platformStructure = (t, platform) => {
 
         const archProperties = PROPERTIES[branch.type];
 
-        Object.keys(branch.arches).forEach((a) => {
-            const arch = branch.arches[a];
+        for(const [
+            a,
+            arch
+        ] of Object.entries(branch.arches)) {
             t.true(EXPECTED_ARCHES.has(a));
 
             for(const property of archProperties) {
@@ -78,24 +82,27 @@ const platformStructure = (t, platform) => {
                 t.true(arch.version in mdu[arch.product]);
                 t.true(arch.platform in mdu.PLATFORMS);
             }
-        });
-    });
+        }
+    }
 };
 platformStructure.title = (providedTitle) => `${providedTitle} structure`;
 
-Object.keys(platforms).forEach((p) => {
-    test(p, platformStructure, platforms[p]);
-});
+for(const [
+    p,
+    platform
+] of Object.entries(platforms)) {
+    test(p, platformStructure, platform);
+}
 
 test('Platforms comply to the schema', (t) => {
     //TODO schema should check for the presence of the type specific properties
     const ajv = new Ajv();
 
     const valid = ajv.validate(schema, platforms);
-    if(!valid) {
-        t.fail(ajv.errorsText());
+    if(valid) {
+        t.true(valid);
     }
     else {
-        t.true(valid);
+        t.fail(`${ajv.errorsText()}`);
     }
 });

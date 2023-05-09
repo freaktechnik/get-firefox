@@ -38,41 +38,41 @@ const cli = meow(`
     flags: {
         architecture: {
             type: "string",
-            alias: "a"
+            shortFlag: "a"
         },
         branch: {
             type: "string",
-            alias: "b",
+            shortFlag: "b",
             default: "nightly"
         },
         check: {
             type: "boolean",
-            alias: "c"
+            shortFlag: "c"
         },
         extract: {
             type: "boolean",
-            alias: "e"
+            shortFlag: "e"
         },
         help: {
             type: "boolean",
-            alias: "h"
+            shortFlag: "h"
         },
         list: {
             type: "boolean",
-            alias: "l"
+            shortFlag: "l"
         },
         platform: {
             type: "string",
-            alias: "p",
+            shortFlag: "p",
             default: getDefaultSystem()
         },
         target: {
             type: "string",
-            alias: "t"
+            shortFlag: "t"
         },
         version: {
             type: "boolean",
-            alias: "v"
+            shortFlag: "v"
         },
         verbose: {
             type: "boolean",

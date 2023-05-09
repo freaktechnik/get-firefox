@@ -1,27 +1,17 @@
 name: test
 on: [push, pull_request]
 jobs:
-  # lint-js:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v3
-  #     - uses: actions/setup-node@v3
-  #       with:
-  #         cache: 'npm'
-  #     - run: npm ci --no-audit
-  #     - run: npm run lint:js
-  lint-editorconfig:
+  lint-js:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
         with:
-          node-version: 'lts/*'
           cache: 'npm'
       - run: npm ci --no-audit
-      - run: npm run lint:ec
+      - run: npm run lint
   test:
-    needs: [lint-editorconfig]
+    needs: [lint-js]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

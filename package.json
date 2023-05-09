@@ -5,9 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint:js": "eslint index.js lib/ bin/ test/ --ext js,json",
-    "lint:ec": "eclint check $(git ls-files)",
-    "lint": "npm run lint:js && npm run lint:ec",
+    "lint": "eslint index.js lib/ bin/ test/ --ext js,json",
     "test": "nyc ava",
     "start": "node bin/get-firefox.js"
   },
@@ -52,12 +50,11 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^9.2.0",
-    "@freaktechnik/eslint-config-test": "^9.1.1",
+    "@freaktechnik/eslint-config-node": "^9.2.1",
+    "@freaktechnik/eslint-config-test": "^9.2.1",
     "ajv": "^8.12.0",
     "ava": "^5.2.0",
-    "eclint": "^2.8.1",
-    "eslint": "^8.39.0",
+    "eslint": "^8.40.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
     "nyc": "^15.1.0",
     "tmp-promise": "^3.0.3"

@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint index.js lib/ bin/ test/ --ext js,json",
-    "test": "nyc ava",
+    "test": "c8 ava",
     "start": "node bin/get-firefox.js"
   },
   "keywords": [
@@ -54,9 +54,9 @@
     "@freaktechnik/eslint-config-test": "^9.2.1",
     "ajv": "^8.12.0",
     "ava": "^6.1.1",
+    "c8": "^9.1.0",
     "eslint": "^8.56.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
-    "nyc": "^15.1.0",
     "tmp-promise": "^3.0.3"
   },
   "ava": {

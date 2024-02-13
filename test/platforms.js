@@ -1,6 +1,6 @@
 import test from 'ava';
 import fs from 'node:fs/promises';
-import mdu from 'moz-download-url';
+import * as mdu from 'moz-download-url';
 import Ajv from 'ajv';
 const platforms = JSON.parse(await fs.readFile(new URL('../lib/platforms.json', import.meta.url)));
 const schema = JSON.parse(await fs.readFile(new URL('../schemas/platforms.json', import.meta.url)));
@@ -79,7 +79,7 @@ const platformStructure = (t, platform) => {
 
             if(branch.type == "mdu") {
                 t.true(arch.product in mdu);
-                t.true(arch.version in mdu[arch.product]);
+                t.true(arch.version in mdu[arch.product]); // eslint-disable-line import/namespace
                 t.true(arch.platform in mdu.PLATFORMS);
             }
         }

@@ -7,6 +7,7 @@
   "scripts": {
     "lint": "eslint index.js lib/ bin/ test/ --ext js,json",
     "test": "c8 ava",
+    "coverage": "c8 report -r lcov",
     "start": "node bin/get-firefox.js"
   },
   "keywords": [

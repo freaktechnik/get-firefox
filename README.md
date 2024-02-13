@@ -24,7 +24,7 @@ Use `hdiutil`or similar to access the contents of the `.dmg`.
 ### As node module
 
 ```js
-var getFirefox = require("get-firefox");
+import { getDefaultSystem, getContainer, downloadFirefox, check, extract, PLATFORMS } = from "get-firefox";
 ```
 
 The main module implements a few public methods, see the binary file for their usage.

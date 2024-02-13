@@ -1,6 +1,6 @@
 # get-firefox
 
-[![codecov.io](https://codecov.io/github/freaktechnik/get-firefox/coverage.svg?branch=master)](https://codecov.io/github/freaktechnik/get-firefox?branch=master)
+[![codecov](https://codecov.io/gh/freaktechnik/get-firefox/graph/badge.svg?token=R7n92FrUF8)](https://codecov.io/gh/freaktechnik/get-firefox)
 
 Download the latest Firefox from the command line. Supports almost any release,
 except on Android.

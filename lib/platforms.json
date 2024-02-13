@@ -7,24 +7,24 @@
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v2.fenix.nightly.latest.armeabi-v7a",
-                        "path": "public/build/armeabi-v7a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.armeabi-v7a",
+                        "path": "public/build",
+                        "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v2.fenix.nightly.latest.arm64-v8a",
-                        "path": "public/build/arm64-v8a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.arm64-v8a",
+                        "path": "public/build",
+                        "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v2.fenix.nightly.latest.x86_64",
-                        "path": "public/build/x86_64",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.x86_64",
+                        "path": "public/build",
+                        "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v2.fenix.nightly.latest.x86",
-                        "path": "public/build/x86/",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.x86",
+                        "path": "public/build",
+                        "fileEnding": ".x86.apk"
                     }
                 }
             },
@@ -33,24 +33,24 @@
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v2.fenix.beta.latest.armeabi-v7a",
-                        "path": "public/build/armeabi-v7a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.armeabi-v7a",
+                        "path": "public/build",
+                        "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v2.fenix.beta.latest.arm64-v8a",
-                        "path": "public/build/arm64-v8a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.arm64-v8a",
+                        "path": "public/build",
+                        "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v2.fenix.beta.latest.x86_64",
-                        "path": "public/build/x86_64",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.x86_64",
+                        "path": "public/build",
+                        "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v2.fenix.beta.latest.x86",
-                        "path": "public/build/x86/",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.x86",
+                        "path": "public/build",
+                        "fileEnding": ".x86.apk"
                     }
                 }
             },
@@ -59,24 +59,24 @@
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v2.fenix.release.latest.armeabi-v7a",
-                        "path": "public/build/armeabi-v7a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "path": "public/build",
+                        "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v2.fenix.release.latest.arm64-v8a",
-                        "path": "public/build/arm64-v8a",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "path": "public/build",
+                        "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v2.fenix.release.latest.x86_64",
-                        "path": "public/build/x86_64",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "path": "public/build",
+                        "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v2.fenix.release.latest.x86",
-                        "path": "public/build/x86/",
-                        "fileEnding": ".apk"
+                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "path": "public/build",
+                        "fileEnding": ".x86.apk"
                     }
                 }
             }

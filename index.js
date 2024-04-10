@@ -38,7 +38,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     CONTAINERS = [
         ClassicContainer,
         MDUContainer,
-        TaskclusterContainer
+        TaskclusterContainer,
     ],
 
     /**
@@ -90,7 +90,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
                     s,
                     type,
                     b, // eslint-disable-line no-unused-vars
-                    path
+                    path,
                 ] = line.split(" ");
                 if(type == "sha512" && path.split("/").pop() == filename) {
                     sum = s;
@@ -107,7 +107,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
         throw new Error("No checksums available");
     },
     calculateChecksum = (stream, expected) => stream.pipe(sha.stream(expected, {
-        algorithm: "sha512"
+        algorithm: "sha512",
     })),
 
     /**
@@ -179,5 +179,5 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     extract = (file, targetDirectory = ".") => decompress(file, targetDirectory);
 
 export {
-    getDefaultSystem, getContainer, downloadFirefox, check, extract, PLATFORMS
+    getDefaultSystem, getContainer, downloadFirefox, check, extract, PLATFORMS,
 };

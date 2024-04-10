@@ -7,7 +7,7 @@ import {
     downloadFirefox,
     check,
     extract,
-    PLATFORMS
+    PLATFORMS,
 } from '../index.js';
 import meow from "meow";
 import streamToPromise from "stream-to-promise";
@@ -38,47 +38,47 @@ const cli = meow(`
     flags: {
         architecture: {
             type: "string",
-            shortFlag: "a"
+            shortFlag: "a",
         },
         branch: {
             type: "string",
             shortFlag: "b",
-            default: "nightly"
+            default: "nightly",
         },
         check: {
             type: "boolean",
-            shortFlag: "c"
+            shortFlag: "c",
         },
         extract: {
             type: "boolean",
-            shortFlag: "e"
+            shortFlag: "e",
         },
         help: {
             type: "boolean",
-            shortFlag: "h"
+            shortFlag: "h",
         },
         list: {
             type: "boolean",
-            shortFlag: "l"
+            shortFlag: "l",
         },
         platform: {
             type: "string",
             shortFlag: "p",
-            default: getDefaultSystem()
+            default: getDefaultSystem(),
         },
         target: {
             type: "string",
-            shortFlag: "t"
+            shortFlag: "t",
         },
         version: {
             type: "boolean",
-            shortFlag: "v"
+            shortFlag: "v",
         },
         verbose: {
             type: "boolean",
-            default: isCI
-        }
-    }
+            default: isCI,
+        },
+    },
 });
 
 if(cli.flags.list) {
@@ -88,7 +88,7 @@ if(cli.flags.list) {
         multipleArches = false;
     for(const [
         p,
-        plat
+        plat,
     ] of Object.entries(PLATFORMS)) {
         title = p;
         if(p == defaultPlatform) {
@@ -123,16 +123,16 @@ else {
                 context.container = getContainer(cli.flags.branch, cli.flags.platform, cli.flags.architecture);
                 const promises = [
                         context.container.getFileName(),
-                        context.container.getFileURL()
+                        context.container.getFileURL(),
                     ],
                     [
                         fileName,
-                        fileURL
+                        fileURL,
                     ] = await Promise.all(promises);
 
                 context.url = fileURL;
                 context.name = fileName;
-            }
+            },
         },
         {
             title: "Get checksum",
@@ -150,7 +150,7 @@ else {
                         throw error;
                     }
                 }
-            }
+            },
         },
         {
             title: "Download",
@@ -158,7 +158,7 @@ else {
                 task.output = `Downloading from ${chalk.blue(context.url)}`;
                 context.stream = await downloadFirefox(context.container);
                 context.buffer = await streamToPromise(context.stream);
-            }
+            },
         },
         {
             title: "Verify checksum",
@@ -167,7 +167,7 @@ else {
             task: async (context) => {
                 context.stream = check(context.buffer, context.name, context.checksums);
                 context.buffer = await streamToPromise(context.stream);
-            }
+            },
         },
         {
             title: "Extract",
@@ -175,7 +175,7 @@ else {
             task: (context, task) => {
                 task.output = `Extracting the archive to ${chalk.blue(cli.flags.target || "./")}`;
                 return extract(context.buffer, cli.flags.target);
-            }
+            },
         },
         {
             title: "Write file to disk",
@@ -184,10 +184,10 @@ else {
                 const saveAs = cli.flags.target || context.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
                 return fs.writeFile(saveAs, context.buffer);
-            }
-        }
+            },
+        },
     ], {
-        renderer: cli.flags.verbose ? 'verbose' : 'default'
+        renderer: cli.flags.verbose ? 'verbose' : 'default',
     }).run();
 }
 /* eslint-enable require-atomic-updates */

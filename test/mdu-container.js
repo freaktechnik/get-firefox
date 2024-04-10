@@ -5,7 +5,7 @@ import MDUContainer from '../lib/mdu-container.js';
 test("MDUContainer interface check", testContainer, MDUContainer, {
     platform: "LINUX64",
     product: "FIREFOX",
-    version: "LATEST"
+    version: "LATEST",
 });
 
 test("Get Checksums rejects", (t) => {
@@ -13,6 +13,6 @@ test("Get Checksums rejects", (t) => {
 
     return t.throwsAsync(container.getChecksums(), {
         instanceOf: Error,
-        message: "No checksums available"
+        message: "No checksums available",
     });
 });

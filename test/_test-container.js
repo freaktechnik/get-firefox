@@ -1,7 +1,7 @@
 const METHODS = [
     "getFileURL",
     "getFileName",
-    "getChecksums"
+    "getChecksums",
 ];
 
 export default (t, Constructor, spec = {}) => {

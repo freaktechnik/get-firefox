@@ -17,7 +17,7 @@ const testGetFirefox = async (t, platform) => {
     const temporaryDirectory = await tmp.dir({ unsafeCleanup: true });
     const { stderr } = await exec(`${getFirefoxBinary} -p ${platform} -b ${PLATFORMS[platform].defaultBranch}`, {
         shell: true,
-        cwd: temporaryDirectory.path
+        cwd: temporaryDirectory.path,
     });
     t.is(stderr, '');
     const files = await fs.readdir(temporaryDirectory.path);

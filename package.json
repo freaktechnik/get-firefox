@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "lint": "eslint index.js lib/ bin/ test/ --ext js,json",
+    "lint": "eslint index.js lib/ bin/ test/",
     "test": "c8 ava",
     "coverage": "c8 report -r lcov",
     "start": "node bin/get-firefox.js"
@@ -51,8 +51,8 @@
     "node": ">=16.0.0"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^9.2.1",
-    "@freaktechnik/eslint-config-test": "^9.2.1",
+    "@freaktechnik/eslint-config-node": "^10.0.6",
+    "@freaktechnik/eslint-config-test": "^10.0.6",
     "ajv": "^8.12.0",
     "ava": "^6.1.2",
     "c8": "^9.1.0",

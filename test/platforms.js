@@ -9,17 +9,17 @@ const schema = JSON.parse(await fs.readFile(new URL('../schemas/platforms.json',
 const PROPERTIES = {
     "classic": [
         "path",
-        "fileEnding"
+        "fileEnding",
     ],
     "mdu": [
         "platform",
         "product",
-        "version"
+        "version",
     ],
     "taskcluster": [
         "fileEnding",
-        "namespace"
-    ]
+        "namespace",
+    ],
 };
 
 const EXPECTED_BRANCHES = new Set([
@@ -28,7 +28,7 @@ const EXPECTED_BRANCHES = new Set([
     "beta",
     "release",
     "esr",
-    "unbranded-release"
+    "unbranded-release",
 ]);
 
 const EXPECTED_ARCHES = new Set([
@@ -36,7 +36,7 @@ const EXPECTED_ARCHES = new Set([
     "x86",
     "arm",
     "multi",
-    "arm64"
+    "arm64",
 ]);
 
 const platformStructure = (t, platform) => {
@@ -50,7 +50,7 @@ const platformStructure = (t, platform) => {
 
     for(const [
         b,
-        branch
+        branch,
     ] of Object.entries(platform.branches)) {
         t.true("defaultArch" in branch);
         t.true("type" in branch);
@@ -68,7 +68,7 @@ const platformStructure = (t, platform) => {
 
         for(const [
             a,
-            arch
+            arch,
         ] of Object.entries(branch.arches)) {
             t.true(EXPECTED_ARCHES.has(a));
 
@@ -79,7 +79,7 @@ const platformStructure = (t, platform) => {
 
             if(branch.type == "mdu") {
                 t.true(arch.product in mdu);
-                t.true(arch.version in mdu[arch.product]); // eslint-disable-line import/namespace
+                t.true(arch.version in mdu[arch.product]); // TODO:eslint-disable-line import/namespace
                 t.true(arch.platform in mdu.PLATFORMS);
             }
         }
@@ -89,7 +89,7 @@ platformStructure.title = (providedTitle) => `${providedTitle} structure`;
 
 for(const [
     p,
-    platform
+    platform,
 ] of Object.entries(platforms)) {
     test(p, platformStructure, platform);
 }

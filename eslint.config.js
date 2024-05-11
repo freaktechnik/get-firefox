@@ -7,12 +7,6 @@ export default [
     {
         files: ["**/*.js"],
         rules: {
-            "unicorn/import-index": [
-                "warn",
-                {
-                    "ignoreImports": true
-                }
-            ],
             "node/no-missing-import": "off",
         },
     },

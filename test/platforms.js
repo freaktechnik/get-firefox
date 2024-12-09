@@ -79,7 +79,7 @@ const platformStructure = (t, platform) => {
 
             if(branch.type == "mdu") {
                 t.true(arch.product in mdu);
-                t.true(arch.version in mdu[arch.product]); // TODO:eslint-disable-line import/namespace
+                t.true(arch.version in mdu[arch.product]); // eslint-disable-line import/namespace
                 t.true(arch.platform in mdu.PLATFORMS);
             }
         }

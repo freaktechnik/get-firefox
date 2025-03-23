@@ -1,0 +1,39 @@
+name: Release
+on:
+  push:
+    tags:
+      - 'v[0-9]+\.[0-9]+\.[0-9]+'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          check-latest: true
+          cache: 'npm'
+      - run: npm i -g npm@latest
+      - run: npm ci --no-audit
+      - run: npm t
+  npm-publish:
+    needs: test
+    runs-on: ubuntu-latest
+    name: Publish
+    permissions:
+      id-token: write
+    environment:
+      name: production
+      url: https://www.npmjs.com/package/get-firefox
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          check-latest: true
+          cache: 'npm'
+      - run: npm i -g npm@latest
+      - uses: JS-DevTools/npm-publish@v3
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+          package: ./package.json

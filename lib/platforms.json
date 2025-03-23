@@ -3,78 +3,78 @@
         "defaultBranch": "nightly",
         "branches": {
             "nightly": {
-                "defaultArch": "arm",
+                "defaultArch": "arm64",
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.armeabi-v7a",
+                        "namespace": "gecko.v2.mozilla-central.latest.mobile.fenix-nightly",
                         "path": "public/build",
                         "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.arm64-v8a",
+                        "namespace": "gecko.v2.mozilla-central.latest.mobile.fenix-nightly",
                         "path": "public/build",
                         "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.x86_64",
+                        "namespace": "gecko.v2.mozilla-central.latest.mobile.fenix-nightly",
                         "path": "public/build",
                         "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-nightly.latest.x86",
+                        "namespace": "gecko.v2.mozilla-central.latest.mobile.fenix-nightly",
                         "path": "public/build",
                         "fileEnding": ".x86.apk"
                     }
                 }
             },
             "beta": {
-                "defaultArch": "arm",
+                "defaultArch": "arm64",
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.armeabi-v7a",
+                        "namespace": "gecko.v2.mozilla-beta.latest.mobile.fenix-beta",
                         "path": "public/build",
                         "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.arm64-v8a",
+                        "namespace": "gecko.v2.mozilla-beta.latest.mobile.fenix-beta",
                         "path": "public/build",
                         "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.x86_64",
+                        "namespace": "gecko.v2.mozilla-beta.latest.mobile.fenix-beta",
                         "path": "public/build",
                         "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-beta.latest.x86",
+                        "namespace": "gecko.v2.mozilla-beta.latest.mobile.fenix-beta",
                         "path": "public/build",
                         "fileEnding": ".x86.apk"
                     }
                 }
             },
             "release": {
-                "defaultArch": "arm",
+                "defaultArch": "arm64",
                 "type": "taskcluster",
                 "arches": {
                     "arm": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "namespace": "gecko.v2.mozilla-release.latest.mobile.fenix-release",
                         "path": "public/build",
                         "fileEnding": ".armeabi-v7a.apk"
                     },
                     "arm64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "namespace": "gecko.v2.mozilla-release.latest.mobile.fenix-release",
                         "path": "public/build",
                         "fileEnding": ".arm64-v8a.apk"
                     },
                     "x86_64": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "namespace": "gecko.v2.mozilla-release.latest.mobile.fenix-release",
                         "path": "public/build",
                         "fileEnding": ".x86_64.apk"
                     },
                     "x86": {
-                        "namespace": "mobile.v3.firefox-android.apks.fenix-release.latest",
+                        "namespace": "gecko.v2.mozilla-release.latest.mobile.fenix-release",
                         "path": "public/build",
                         "fileEnding": ".x86.apk"
                     }
@@ -162,16 +162,6 @@
                         "platform": "LINUX32",
                         "product": "FIREFOX",
                         "version": "LATEST_ESR"
-                    }
-                }
-            },
-            "unbranded-release": {
-                "defaultArch": "x86_64",
-                "type": "taskcluster",
-                "arches": {
-                    "x86_64": {
-                        "namespace": "gecko.v2.mozilla-release.latest.firefox.linux64-add-on-devel",
-                        "fileEnding": ".tar.bz2"
                     }
                 }
             }

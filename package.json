@@ -1,6 +1,6 @@
 {
   "name": "get-firefox",
-  "version": "6.0.0",
+  "version": "7.0.0",
   "description": "Download the latest Firefox from the command line",
   "type": "module",
   "main": "index.js",

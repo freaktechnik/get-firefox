@@ -4,3 +4,4 @@ coverage
 test
 schemas
 .github
+eslint.config.js

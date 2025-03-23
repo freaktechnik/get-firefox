@@ -38,14 +38,14 @@
     "taskcluster-client": "^83.3.0"
   },
   "bin": {
-    "get-firefox": "./bin/get-firefox.js"
+    "get-firefox": "bin/get-firefox.js"
   },
   "bugs": {
     "url": "https://github.com/freaktechnik/get-firefox/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/freaktechnik/get-firefox.git"
+    "url": "git+https://github.com/freaktechnik/get-firefox.git"
   },
   "engines": {
     "node": ">=16.0.0"

@@ -30,7 +30,7 @@
     "into-stream": "^8.0.1",
     "is-ci": "^4.1.0",
     "listr": "^0.14.3",
-    "meow": "^13.2.0",
+    "meow": "^14.0.0",
     "moz-download-url": "^3.0.0",
     "node-fetch": "^3.3.2",
     "sha": "^3.0.0",

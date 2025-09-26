@@ -156,7 +156,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     /**
      * Check the checksum of a local file.
      *
-     * @param {Buffer} buffer - Buffer of the downloaded file.
+     * @param {Uint8Array|ArrayBuffer|TypedArray} buffer - Buffer of the downloaded file.
      * @param {string} targetName - Name of the remote file.
      * @param {string} sum - Checksum the file should match.
      * @returns {Stream} A Stream that errors if the hash does not match.

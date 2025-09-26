@@ -10,7 +10,7 @@ import {
     PLATFORMS,
 } from '../index.js';
 import meow from "meow";
-import streamToPromise from "stream-to-promise";
+import { getStreamAsArrayBuffer } from "get-stream";
 import chalk from "chalk";
 import Listr from "listr";
 import isCI from "is-ci";
@@ -157,7 +157,7 @@ else {
             task: async (context, task) => {
                 task.output = `Downloading from ${chalk.blue(context.url)}`;
                 context.stream = await downloadFirefox(context.container);
-                context.buffer = await streamToPromise(context.stream);
+                context.buffer = await getStreamAsArrayBuffer(context.stream);
             },
         },
         {
@@ -166,7 +166,7 @@ else {
             skip: (context) => context.noChecksums || !context.checksums,
             task: async (context) => {
                 context.stream = check(context.buffer, context.name, context.checksums);
-                context.buffer = await streamToPromise(context.stream);
+                context.buffer = await getStreamAsArrayBuffer(context.stream);
             },
         },
         {
@@ -183,7 +183,7 @@ else {
             task: (context, task) => {
                 const saveAs = cli.flags.target || context.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return fs.writeFile(saveAs, context.buffer);
+                return fs.writeFile(saveAs, new Uint8Array(context.buffer));
             },
         },
     ], {

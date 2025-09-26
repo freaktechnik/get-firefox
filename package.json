@@ -48,7 +48,7 @@
     "url": "git+https://github.com/freaktechnik/get-firefox.git"
   },
   "engines": {
-    "node": ">=16.0.0"
+    "node": ">=20"
   },
   "devDependencies": {
     "@freaktechnik/eslint-config-node": "^11.0.0",

@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 /* eslint-disable require-atomic-updates */
 import fs from "node:fs/promises";
+import { arrayBuffer } from "node:stream/consumers";
 import {
     getDefaultSystem,
     getContainer,
@@ -10,7 +11,6 @@ import {
     PLATFORMS,
 } from '../index.js';
 import meow from "meow";
-import { getStreamAsArrayBuffer } from "get-stream";
 import chalk from "chalk";
 import Listr from "listr";
 import isCI from "is-ci";
@@ -157,7 +157,7 @@ else {
             task: async (context, task) => {
                 task.output = `Downloading from ${chalk.blue(context.url)}`;
                 context.stream = await downloadFirefox(context.container);
-                context.buffer = await getStreamAsArrayBuffer(context.stream);
+                context.buffer = await arrayBuffer(context.stream);
             },
         },
         {
@@ -166,7 +166,7 @@ else {
             skip: (context) => context.noChecksums || !context.checksums,
             task: async (context) => {
                 context.stream = check(context.buffer, context.name, context.checksums);
-                context.buffer = await getStreamAsArrayBuffer(context.stream);
+                context.buffer = await arrayBuffer(context.stream);
             },
         },
         {

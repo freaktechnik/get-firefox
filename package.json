@@ -50,8 +50,8 @@
     "node": ">=20"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^11.0.0",
-    "@freaktechnik/eslint-config-test": "^11.0.0",
+    "@freaktechnik/eslint-config-node": "^11.0.1",
+    "@freaktechnik/eslint-config-test": "^11.0.1",
     "ajv": "^8.17.1",
     "ava": "^6.4.1",
     "c8": "^10.1.3",

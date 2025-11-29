@@ -83,30 +83,30 @@ const cli = meow(`
 
 if(cli.flags.list) {
     const defaultPlatform = getDefaultSystem();
-    let branch,
-        title,
-        multipleArches = false;
     for(const [
-        p,
+        platformName,
         plat,
     ] of Object.entries(PLATFORMS)) {
-        title = p;
-        if(p == defaultPlatform) {
+        let title = platformName;
+        if(platformName == defaultPlatform) {
             title += chalk.gray(" (default)");
         }
         process.stdout.write(`${chalk.underline.bold(title)}\n`);
-        for(const b in plat.branches) {
-            branch = plat.branches[b];
-            title = chalk.bold(b);
-            if(b == plat.defaultBranch) {
+        for(const [
+            branchName,
+            branch,
+        ] of Object.entries(plat.branches)) {
+            title = chalk.bold(branchName);
+            if(branchName == plat.defaultBranch) {
                 title = chalk.yellow(title);
                 title += chalk.gray(" (default)");
             }
             process.stdout.write(` ${title}\n`);
-            multipleArches = Object.keys(branch.arches).length;
-            for(const a in branch.arches) {
-                title = a;
-                if(a == branch.defaultArch && multipleArches) {
+            const arches = Object.keys(branch.arches),
+                multipleArches = arches.length;
+            for(const arch of arches) {
+                title = arch;
+                if(arch == branch.defaultArch && multipleArches) {
                     title += chalk.gray(" (default)");
                 }
                 process.stdout.write(`   - ${title}\n`);

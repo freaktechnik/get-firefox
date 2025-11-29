@@ -116,7 +116,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
      * @param {string} branch - Firefox release branch.
      * @param {string} system - System name.
      * @param {string} [arch] - Architecture name.
-     * @returns {module:get-firefox~Container} The container to describe the Firefox
+     * @returns {Container} The container to describe the Firefox
      *                                          to download.
      */
     getContainer = (branch, system, arch) => {
@@ -138,7 +138,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     /**
      * Download Firefox to a target location.
      *
-     * @param {module:get-firefox~Container} container - File downloading container..
+     * @param {Container} container - File downloading container..
      * @returns {object} Resolves as soon as the file is written.
      * @async
      * @throws Whenever something goes wrong. No guaranteed type.

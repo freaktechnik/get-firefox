@@ -30,8 +30,6 @@ const testGetFirefox = async (t, platform) => {
 };
 testGetFirefox.title = (title, platform) => `${title}: ${platform}`;
 
-for(const platform in PLATFORMS) {
-    if(PLATFORMS.hasOwnProperty(platform)) {
-        test('platform downloads something', testGetFirefox, platform);
-    }
+for(const platform of Object.keys(PLATFORMS)) {
+    test('platform downloads something', testGetFirefox, platform);
 }

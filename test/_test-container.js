@@ -10,10 +10,11 @@ export default (t, Constructor, spec = {}) => {
 
     const container = new Constructor(spec);
 
-    for(const m of METHODS) {
-        t.true(m in container);
-        t.is(typeof container[m], "function");
-        const promise = container[m]();
+    for(const method of METHODS) {
+        // eslint-disable-next-line unicorn/no-computed-property-existence-check
+        t.true(method in container, `container ${Constructor.name} has ${method}`);
+        t.is(typeof container[method], "function");
+        const promise = container[method]();
         promise.catch(() => "Just an error");
         t.is(typeof promise.then, "function", "Method returns a promise");
     }

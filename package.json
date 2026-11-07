@@ -2,14 +2,33 @@
   "name": "get-firefox",
   "version": "8.0.0",
   "description": "Download the latest Firefox from the command line",
+  "license": "MPL-2.0",
+  "repository": "github:freaktechnik/get-firefox",
+  "bugs": "https://github.com/freaktechnik/get-firefox/issues",
+  "author": "freaktechnik (https://humanoids.be)",
   "type": "module",
-  "main": "index.js",
+  "main": "./index.js",
+  "bin": {
+    "get-firefox": "./bin/get-firefox.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "publishConfig": {
+    "provenance": true
+  },
   "scripts": {
-    "lint": "eslint index.js lib/ bin/ test/",
+    "lint": "eslint index.js lib/ bin/ test/ package.json",
     "test": "c8 ava",
-    "coverage": "c8 report -r lcov",
+    "coverage": "c8 report --reporter lcov",
     "start": "node bin/get-firefox.js"
   },
+  "files": [
+    "index.js",
+    "bin/get-firefox-js",
+    "lib/*.js",
+    "lib/platforms.json"
+  ],
   "keywords": [
     "fennec",
     "fxa",
@@ -22,8 +41,6 @@
     "devedition",
     "esr"
   ],
-  "author": "freaktechnik (http://humanoids.be)",
-  "license": "MPL-2.0",
   "dependencies": {
     "chalk": "^6.0.1",
     "decompress": "^4.2.1",
@@ -36,33 +53,16 @@
     "sha": "^3.0.0",
     "taskcluster-client": "^87.1.3"
   },
-  "bin": {
-    "get-firefox": "bin/get-firefox.js"
-  },
-  "bugs": {
-    "url": "https://github.com/freaktechnik/get-firefox/issues"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/freaktechnik/get-firefox.git"
-  },
-  "engines": {
-    "node": ">=20"
-  },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^13.0.0",
-    "@freaktechnik/eslint-config-test": "^13.0.0",
+    "@freaktechnik/eslint-config-node": "^14.1.0",
+    "@freaktechnik/eslint-config-test": "^14.1.0",
     "ajv": "^8.20.0",
     "ava": "^8.2.0",
     "c8": "^12.0.0",
     "eslint": "^10.13.0",
-    "eslint-plugin-optimize-regex": "^1.2.1",
     "tmp-promise": "^3.0.3"
   },
   "ava": {
     "timeout": "1m"
-  },
-  "publishConfig": {
-    "provenance": true
   }
 }

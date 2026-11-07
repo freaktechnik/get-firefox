@@ -40,6 +40,8 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
         MDUContainer,
         TaskclusterContainer,
     ],
+    CHECKSUM_FILE_LINE_ITEM_COUNT = 4,
+    FIRST_ITEM_ONLY = 1,
 
     /**
      * Get the best-matching system for the current operating system, falling back
@@ -61,7 +63,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     },
 
     normalizeSystem = (system) => {
-        if(!system || !(system in PLATFORMS)) {
+        if(!system || !Object.hasOwn(PLATFORMS, system)) {
             const defaultPlatform = getDefaultSystem();
             if(system) {
                 console.warn(`Unknown platform '${system}', defaulting to ${defaultPlatform}`);
@@ -72,7 +74,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
         return system;
     },
     normalizeBranch = (branch, system) => {
-        if(!branch || !(branch in PLATFORMS[system].branches)) {
+        if(!branch || !Object.hasOwn(PLATFORMS[system].branches, branch)) {
             if(branch) {
                 console.warn(`Unknown branch '${branch}', defaulting to ${PLATFORMS[system].defaultBranch}`);
             }
@@ -84,20 +86,16 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
     getDownloadInfo = (branch, system) => PLATFORMS[system].branches[branch],
     getFileChecksum = (filename, file) => {
         if(file) {
-            let sum;
-            file.split("\n").some((line) => {
+            const [ sum ] = file.split("\n").find((line) => {
                 const [
-                    s,
+                    , // sum
                     type,
-                    b, // eslint-disable-line no-unused-vars
+                    , // b
                     path,
-                ] = line.split(" ");
-                if(type == "sha512" && path.split("/").pop() == filename) {
-                    sum = s;
-                    return true;
-                }
-                return false;
-            });
+                ] = line.split(" ", CHECKSUM_FILE_LINE_ITEM_COUNT);
+                return type == "sha512" && path.split("/").pop() == filename;
+            })
+                .split(" ", FIRST_ITEM_ONLY);
 
             if(sum) {
                 return sum;
@@ -126,7 +124,7 @@ const PLATFORMS = JSON.parse(await fs.readFile(new URL("./lib/platforms.json", i
             { type } = PLATFORMS[system].branches[branch],
             Constructor = CONTAINERS.find((c) => c.type == type);
 
-        if(!(arch in spec.arches)) {
+        if(!Object.hasOwn(spec.arches, arch)) {
             if(arch) {
                 console.warn(`There is no architecture ${arch} for ${system}, defaulting to ${spec.defaultArch}`);
             }

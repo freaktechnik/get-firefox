@@ -106,7 +106,7 @@ if(cli.flags.list) {
                 multipleArches = arches.length;
             for(const arch of arches) {
                 title = arch;
-                if(arch == branch.defaultArch && multipleArches) {
+                if(multipleArches && arch == branch.defaultArch) {
                     title += chalk.gray(" (default)");
                 }
                 process.stdout.write(`   - ${title}\n`);
@@ -183,7 +183,7 @@ else {
             task: (context, task) => {
                 const saveAs = cli.flags.target || context.name;
                 task.output = `Saving as ${chalk.blue(saveAs)}`;
-                return fs.writeFile(saveAs, new Uint8Array(context.buffer));
+                return fs.writeFile(saveAs, new Uint8Array(context.buffer, context.byteOffset, context.byteLength));
             },
         },
     ], {

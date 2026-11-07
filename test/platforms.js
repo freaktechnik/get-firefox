@@ -46,7 +46,7 @@ const platformStructure = (t, platform) => {
     t.is(typeof platform.defaultBranch, "string");
     t.is(typeof platform.branches, "object");
 
-    t.true(platform.defaultBranch in platform.branches);
+    t.true(Object.hasOwn(platform.branches, platform.defaultBranch));
 
     for(const [
         b,
@@ -60,8 +60,8 @@ const platformStructure = (t, platform) => {
         t.is(typeof branch.type, "string");
         t.is(typeof branch.arches, "object");
 
-        t.true(branch.type in PROPERTIES);
-        t.true(branch.defaultArch in branch.arches);
+        t.true(Object.hasOwn(PROPERTIES, branch.type));
+        t.true(Object.hasOwn(branch.arches, branch.defaultArch));
         t.true(EXPECTED_BRANCHES.has(b));
 
         const archProperties = PROPERTIES[branch.type];
@@ -73,14 +73,14 @@ const platformStructure = (t, platform) => {
             t.true(EXPECTED_ARCHES.has(a));
 
             for(const property of archProperties) {
-                t.true(property in arch);
+                t.true(Object.hasOwn(arch, property));
                 t.is(typeof arch[property], "string");
             }
 
             if(branch.type == "mdu") {
-                t.true(arch.product in mdu);
-                t.true(arch.version in mdu[arch.product]); // eslint-disable-line import/namespace
-                t.true(arch.platform in mdu.PLATFORMS);
+                t.true(Object.hasOwn(mdu, arch.product));
+                t.true(Object.hasOwn(mdu[arch.product], arch.version)); // eslint-disable-line import/namespace
+                t.true(Object.hasOwn(mdu.PLATFORMS, arch.platform));
             }
         }
     }
@@ -103,6 +103,6 @@ test('Platforms comply to the schema', (t) => {
         t.true(valid);
     }
     else {
-        t.fail(`${ajv.errorsText()}`);
+        t.fail(ajv.errorsText());
     }
 });

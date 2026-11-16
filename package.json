@@ -54,8 +54,8 @@
     "taskcluster-client": "^87.1.3"
   },
   "devDependencies": {
-    "@freaktechnik/eslint-config-node": "^14.1.0",
-    "@freaktechnik/eslint-config-test": "^14.1.0",
+    "@freaktechnik/eslint-config-node": "^14.1.1",
+    "@freaktechnik/eslint-config-test": "^14.1.1",
     "ajv": "^8.20.0",
     "ava": "^8.3.0",
     "c8": "^12.0.0",
